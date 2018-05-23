@@ -1,0 +1,38 @@
+﻿@model IEnumerable<PL.Models.StudentViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(ViewBag => ViewBag.Name)
+        </th>
+        <th></th>
+    </tr>
+
+    
+    <tr>
+        @foreach (var item in Model)
+    {
+
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        @foreach (var v in ViewBag.groups)
+    {
+        <td>
+            <p>@v.Name</p>
+        </td>
+}
+}
+    </tr>
+    
+
+</table>
