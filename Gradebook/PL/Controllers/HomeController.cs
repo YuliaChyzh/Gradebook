@@ -17,17 +17,17 @@ namespace PL.Controllers
         ISubjectService subjectService;
         IGroupService groupService;
 
-        public HomeController() {}
+        public HomeController() { }
 
         public HomeController(IStudentService studentService, ISubjectService subjectService, IGroupService groupService)
         {
             this.studentService = studentService;
             this.subjectService = subjectService;
             this.groupService = groupService;
-         }
+        }
 
         public ActionResult Index()
-        {        
+        {
             //IEnumerable<GroupDTO> groupDtos = groupService.GetGroups();
             //var mapper = new MapperConfiguration(cfg => cfg.CreateMap<GroupDTO, GroupViewModel>()).CreateMapper();
             //var groups = mapper.Map<IEnumerable<GroupDTO>, List<GroupViewModel>>(groupDtos);
@@ -37,13 +37,19 @@ namespace PL.Controllers
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentDTO, StudentViewModel>()).CreateMapper();
             var students = mapper.Map<IEnumerable<StudentDTO>, List<StudentViewModel>>(studentDtos);
 
-            List < GroupDTO > groups= new List<GroupDTO>();
+            List<GroupDTO> groups = new List<GroupDTO>();
             foreach (var item in studentDtos)
             {
                 groups.Add(groupService.GetGroup(item.IdGroup));
             }
+            Dictionary<StudentViewModel, GroupDTO> studentGroup = new Dictionary<StudentViewModel, GroupDTO>();
+
+            foreach (StudentViewModel studentVM in students)
+            {
+                studentGroup.Add(studentVM, groups.FirstOrDefault(g => g.Id == studentVM.IdGroup));
+            }
             ViewBag.groups = groups;
-            return View(students);
+            return View(studentGroup);
         }
 
         public ActionResult About()

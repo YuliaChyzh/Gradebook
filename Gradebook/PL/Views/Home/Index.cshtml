@@ -1,4 +1,5 @@
-﻿@model IEnumerable<PL.Models.StudentViewModel>
+﻿@using BLL.DTO
+@model Dictionary<PL.Models.StudentViewModel, GroupDTO>
 
 @{
     ViewBag.Title = "Index";
@@ -7,32 +8,21 @@
 <h2>Index</h2>
 
 <table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(ViewBag => ViewBag.Name)
-        </th>
-        <th></th>
-    </tr>
 
-    
-    <tr>
-        @foreach (var item in Model)
-    {
 
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        @foreach (var v in ViewBag.groups)
+    @foreach (var item in Model)
     {
-        <td>
-            <p>@v.Name</p>
-        </td>
-}
-}
-    </tr>
-    
+        <tr>
+
+            <td>
+                <p>@item.Key.Name</p>
+            </td>
+            <td>
+                <p>@item.Value.Name</p>
+            </td>
+        </tr>
+    }
+
+
 
 </table>
