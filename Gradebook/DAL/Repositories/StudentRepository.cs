@@ -55,57 +55,5 @@ namespace DAL.Repositories
             studentSet.Remove(item);
             context.SaveChanges();
         }
-
-        /*private EducationContext db;
-
-        public StudentRepository(EducationContext context)
-        {
-            this.db = context;
-        }
-
-        public IEnumerable<Student> GetAll()
-        {
-            return db.Students.Include(o => o.Group);
-        }
-
-        public Student Get(int id)
-        {
-            return db.Students.Find(id);
-        }
-
-        public void Create(Student student)
-        {
-            db.Students.Add(student);
-            db.SaveChanges();
-        }
-
-        public void Update(Student student)
-        {
-            db.Entry(student).State = EntityState.Modified;
-            db.SaveChanges();
-        }
-
-        public Student FindById(int id)
-        {
-            return db.Students
-                .Include(s => s.Group)
-                .Where(s => s.Id == id)
-                .FirstOrDefault();
-        }
-
-
-        public IEnumerable<Student> Find(Func<Student, Boolean> predicate)
-        {
-            return db.Students.Include(o => o.Group).Where(predicate).ToList();
-        }
-
-        public void Delete(int id)
-        {
-            Student student = db.Students.Find(id);
-            if (student != null)
-                db.Students.Remove(student);
-            db.SaveChanges();
-        }
-        */
     }
 }

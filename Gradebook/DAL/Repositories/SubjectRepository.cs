@@ -11,7 +11,6 @@ namespace DAL.Repositories
     public class SubjectRepository: IRepository<Subject>
     {
         EducationContext context;
-        //DbContext context;
         DbSet<Subject> subjectSet;
 
         public SubjectRepository(EducationContext context)
@@ -54,54 +53,5 @@ namespace DAL.Repositories
             subjectSet.Remove(item);
             context.SaveChanges();
         }
-
-        /*private EducationContext db;
-
-        public SubjectRepository(EducationContext context)
-        {
-            this.db = context;
-        }
-
-        public IEnumerable<Subject> GetAll()
-        {
-            return db.Subjects;
-        }
-
-        public Subject Get(int id)
-        {
-            return db.Subjects.Find(id);
-        }
-
-        public void Create(Subject subject)
-        {
-            db.Subjects.Add(subject);
-            db.SaveChanges();
-        }
-
-        public void Update(Subject subject)
-        {
-            db.Entry(subject).State = EntityState.Modified;
-            db.SaveChanges();
-        }
-
-        public Subject FindById(int id)
-        {
-            return db.Subjects
-                .Where(s => s.Id == id)
-                .FirstOrDefault();
-        }
-
-        public IEnumerable<Subject> Find(Func<Subject, Boolean> predicate)
-        {
-            return db.Subjects.Where(predicate).ToList();
-        }
-        public void Delete(int id)
-        {
-            Subject subject = db.Subjects.Find(id);
-            if (subject != null)
-                db.Subjects.Remove(subject);
-            db.SaveChanges();
-        }
-        */
     }
 }

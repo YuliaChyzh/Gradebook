@@ -12,6 +12,7 @@ namespace BLL.DTO
         public int Id { get; set; }
         public int IdStudent { get; set; }
         public int IdSubject { get; set; }
+        public string GroupName { get; set; }
         public int SubjectResult { get; set; }
     }
 }

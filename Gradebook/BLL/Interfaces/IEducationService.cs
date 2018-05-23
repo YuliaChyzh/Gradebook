@@ -14,6 +14,7 @@ namespace BLL.Interfaces
         StudentDTO GetStudent(int idEducation);
         //IEnumerable<SubjectDTO> GetSubjects(int idStudent);
         GroupDTO GetStudentGroup(int idStudent);
+        void SetGroupName(int idEducation);
         void Dispose();
     }
 }

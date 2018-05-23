@@ -47,6 +47,13 @@ namespace BLL.Services
             return mapper.Map<Group, GroupDTO>(student.Group);
         }
 
+        public void SetGroupName(int idEducation)
+        {
+            Education education = Database.EducationsRepository.FindById(idEducation);
+            GroupDTO groupDTO = GetStudentGroup(education.IdStudent);
+            education.GroupName = groupDTO.Name;
+        }
+
         public void Dispose()
         {
             Database.Dispose();

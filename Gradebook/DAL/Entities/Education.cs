@@ -15,6 +15,8 @@ namespace DAL.Entities
         [Required]
         public int IdSubject { get; set; }
 
+        public string GroupName { get; set; }
+
         [Display(Name = "Оцінка")]
         [Range(0, 100, ErrorMessage = "Недопустиме значення")]
         public int SubjectResult { get; set; }

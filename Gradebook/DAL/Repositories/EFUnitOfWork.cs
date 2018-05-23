@@ -28,11 +28,6 @@ namespace DAL.Repositories
 
         private readonly EducationContext db;
 
-        /*public EFUnitOfWork(string connectionString)
-        {
-            db = new EducationContext(connectionString);
-        }*/
-
         public EFUnitOfWork(EducationContext db)
         {
             this.db = db;
@@ -42,47 +37,6 @@ namespace DAL.Repositories
             studentRepository = new Lazy<StudentRepository>(()=>new StudentRepository(db));
             educationRepository = new Lazy<EducationRepository>(()=>new EducationRepository(db));
         }
-
-
-        /*public IRepository<Group> GroupsRepository
-        {
-            get
-            {
-                if (groupRepository == null)
-                    groupRepository = new GroupRepository(db);
-                return groupRepository;
-            }
-        }
-
-        public IRepository<Subject> SubjectsRepository
-        {
-            get
-            {
-                if (subjectRepository == null)
-                    subjectRepository = new SubjectRepository(db);
-                return subjectRepository;
-            }
-        }
-
-        public IRepository<Student> StudentsRepository
-        {
-            get
-            {
-                if (studentRepository == null)
-                    studentRepository = new StudentRepository(db);
-                return studentRepository;
-            }
-        }
-
-        public IRepository<Education> EducationsRepository
-        {
-            get
-            {
-                if (educationRepository == null)
-                    educationRepository = new EducationRepository(db);
-                return educationRepository;
-            }
-        }*/
 
         public void Save()
         {

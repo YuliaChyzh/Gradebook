@@ -43,11 +43,11 @@ namespace DAL.EF
                 context.Subjects.Add(new Subject { Name = "Паралельне програмування" });
                 context.Subjects.Add(new Subject { Name = "Архітектура комп'ютера" });
 
-                context.Educations.Add(new Education { IdStudent = 1, IdSubject = 1, SubjectResult = 95 });
-                context.Educations.Add(new Education { IdStudent = 2, IdSubject = 2, SubjectResult = 98 });
-                context.Educations.Add(new Education { IdStudent = 3, IdSubject = 3, SubjectResult = 97 });
-                context.Educations.Add(new Education { IdStudent = 4, IdSubject = 4, SubjectResult = 96 });
-                context.Educations.Add(new Education { IdStudent = 5, IdSubject = 5, SubjectResult = 99 });
+                context.Educations.Add(new Education { IdStudent = 1, IdSubject = 1, GroupName= "ІП-51", SubjectResult = 95 });
+                context.Educations.Add(new Education { IdStudent = 2, IdSubject = 2, GroupName = "ІП-52", SubjectResult = 98 });
+                context.Educations.Add(new Education { IdStudent = 3, IdSubject = 3, GroupName = "ІП-53", SubjectResult = 97 });
+                context.Educations.Add(new Education { IdStudent = 4, IdSubject = 4, GroupName = "ІП-54", SubjectResult = 96 });
+                context.Educations.Add(new Education { IdStudent = 5, IdSubject = 5, GroupName = "ІП-54", SubjectResult = 99 });
 
             try
             {

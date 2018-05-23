@@ -11,7 +11,6 @@ namespace DAL.Repositories
     class GroupRepository : IRepository<Group>
     {
         private EducationContext context;
-        //DbContext context;
         DbSet<Group> groupSet;
 
         public GroupRepository(EducationContext context)
@@ -54,51 +53,5 @@ namespace DAL.Repositories
             groupSet.Remove(item);
             context.SaveChanges();
         }
-
-
-
-        /*public IEnumerable<Group> GetAll()
-        {
-            return db.Groups;
-        }
-
-        public Group Get(int id)
-        {
-            return db.Groups.Find(id);
-        }
-
-        public void Create(Group group)
-        {
-            db.Groups.Add(group);
-            db.SaveChanges();
-        }
-
-        public void Update(Group group)
-        {
-            db.Entry(group).State = EntityState.Modified;
-            db.SaveChanges();
-        }
-
-        public Group FindById(int id)
-        {
-            return db.Groups.Where(g => g.Id == id).FirstOrDefault();
-        }
-
-        public IEnumerable<Group> Find(Func<Group, Boolean> predicate)
-        {
-            return db.Groups.Where(predicate).ToList();
-        }
-
-        public void Delete(int id)
-        {
-            Group book = db.Groups.Find(id);
-            if (book != null)
-                db.Groups.Remove(book);
-            db.SaveChanges();
-        }*/
-
-
-
-
     }
 }
