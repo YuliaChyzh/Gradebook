@@ -11,6 +11,7 @@ namespace BLL.Interfaces
     {
         SubjectDTO GetSubject(int id);
         IEnumerable<SubjectDTO> GetSubjects();
+        SubjectDTO AddSubject(string name);
         SubjectDTO GetSubjectAvg(int id);
         void Dispose();
     }

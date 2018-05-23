@@ -30,10 +30,17 @@ namespace BLL.Services
         public SubjectDTO GetSubject(int id)
         {
             var subject = Database.SubjectsRepository.FindById(id);
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Subject, SubjectDTO>()).CreateMapper();
+            return mapper.Map<Subject, SubjectDTO>(subject);
+        }
+
+        public SubjectDTO AddSubject(string name)
+        {
+            Subject subject = new Subject();
+            subject.Name = name;
 
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Subject, SubjectDTO>()).CreateMapper();
             return mapper.Map<Subject, SubjectDTO>(subject);
-            //return new SubjectDTO { Id = subject.Id, Name = subject.Name, SubjectAvg=subject.SubjectAvg };
         }
 
         public SubjectDTO GetSubjectAvg(int idSubject)
@@ -43,8 +50,6 @@ namespace BLL.Services
 
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Subject, SubjectDTO>()).CreateMapper();
             return mapper.Map<Subject, SubjectDTO>(subject);
-
-            //return new SubjectDTO { Id = subject.Id, Name = subject.Name, SubjectAvg = subject.SubjectAvg };
         }
 
         public void Dispose()

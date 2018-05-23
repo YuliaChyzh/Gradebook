@@ -28,8 +28,18 @@ namespace BLL.Services
             
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Education, EducationDTO>()).CreateMapper();
             return mapper.Map<Education, EducationDTO>(education);
+        }
 
-            //return new EducationDTO { Id = education.Id, IdStudent = education.IdStudent, IdSubject = education.IdSubject, SubjectResult = education.SubjectResult };
+        public EducationDTO AddStudent(int idStudent, int idSubject, int subjectResult)
+        {
+            Education education = new Education();
+            Student student= Database.StudentsRepository.FindById(idStudent);
+            education.IdStudent = idStudent;
+            education.IdSubject = idSubject;
+            SetGroupName(education.Id);
+            education.SubjectResult = subjectResult;
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Education, EducationDTO>()).CreateMapper();
+            return mapper.Map<Education, EducationDTO>(education);
         }
 
         public StudentDTO GetStudent(int idEducation)

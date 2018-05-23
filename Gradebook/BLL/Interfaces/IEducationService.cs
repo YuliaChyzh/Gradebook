@@ -9,10 +9,9 @@ namespace BLL.Interfaces
 {
     public interface IEducationService
     {
-        //IEnumerable<EducationDTO> GetEducations();
         EducationDTO GetEducation(int idEducation);
+        EducationDTO AddStudent(int idStudent, int idSubject, int subjectResult);
         StudentDTO GetStudent(int idEducation);
-        //IEnumerable<SubjectDTO> GetSubjects(int idStudent);
         GroupDTO GetStudentGroup(int idStudent);
         void SetGroupName(int idEducation);
         void Dispose();
