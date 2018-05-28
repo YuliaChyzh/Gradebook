@@ -10,18 +10,15 @@
 <table class="table">
 
 
-    @foreach (var item in Model)
-    {
         <tr>
 
             <td>
-                <p>@item.Key.Name</p>
+                <p>@Html.ActionLink("Відобразити студентів", "ShowStudent")</p>
             </td>
             <td>
-                <p>@item.Value.Name</p>
+                <p></p>
             </td>
         </tr>
-    }
 
 
 

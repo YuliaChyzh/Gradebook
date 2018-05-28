@@ -31,11 +31,14 @@ namespace BLL.Services
         public StudentDTO GetStudent(int id)
         {
             var student = Database.StudentsRepository.FindById(id);
-
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Student, StudentDTO>()).CreateMapper();
             return mapper.Map<Student, StudentDTO>(student);
+        }
 
-            //return new StudentDTO { Id = student.Id, Name = student.Name, IdGroup=student.IdGroup, StudentAvg = student.StudentAvg };
+        public void AddStudent(StudentDTO studentDTO)
+        {
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentDTO, Student>()).CreateMapper();
+            Database.StudentsRepository.Create(mapper.Map<StudentDTO, Student>(studentDTO));
         }
 
         public GroupDTO GetGroup(StudentDTO student)
@@ -48,11 +51,9 @@ namespace BLL.Services
         public StudentDTO GetStudentAvg(int idStudent)
         {
             Student student = Database.StudentsRepository.FindById(idStudent);
-            student.StudentAvg = Database.EducationsRepository.Get().Where(o => o.Student == student).Average(num => Convert.ToInt64(num.SubjectResult));
+            student.StudentAvg = Database.EducationsRepository.Get().Where(o => o.IdStudent == idStudent).Average(num => Convert.ToInt64(num.SubjectResult));
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Student, StudentDTO>()).CreateMapper();
             return mapper.Map<Student, StudentDTO>(student);
-
-           //return new StudentDTO { Id = student.Id, Name = student.Name, IdGroup=student.IdGroup, StudentAvg = student.StudentAvg };
         }
 
         public void Dispose()

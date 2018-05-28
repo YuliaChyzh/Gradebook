@@ -13,6 +13,8 @@ namespace BLL.Interfaces
         EducationDTO AddStudent(int idStudent, int idSubject, int subjectResult);
         StudentDTO GetStudent(int idEducation);
         GroupDTO GetStudentGroup(int idStudent);
+        SubjectDTO GetSubject(int idSubject);
+        Dictionary<string, int> GetStudentReport(int idStudent);
         void SetGroupName(int idEducation);
         void Dispose();
     }

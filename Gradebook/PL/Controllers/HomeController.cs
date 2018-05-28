@@ -16,23 +16,26 @@ namespace PL.Controllers
         IStudentService studentService;
         ISubjectService subjectService;
         IGroupService groupService;
+        IEducationService educationService;
 
         public HomeController() { }
 
-        public HomeController(IStudentService studentService, ISubjectService subjectService, IGroupService groupService)
+        public HomeController(IStudentService studentService, ISubjectService subjectService, IGroupService groupService, IEducationService educationService)
         {
             this.studentService = studentService;
             this.subjectService = subjectService;
             this.groupService = groupService;
+            this.educationService = educationService;
         }
 
         public ActionResult Index()
         {
-            //IEnumerable<GroupDTO> groupDtos = groupService.GetGroups();
-            //var mapper = new MapperConfiguration(cfg => cfg.CreateMap<GroupDTO, GroupViewModel>()).CreateMapper();
-            //var groups = mapper.Map<IEnumerable<GroupDTO>, List<GroupViewModel>>(groupDtos);
-            //ViewBag.groups = groups;
 
+            return View();
+        }
+
+        public ActionResult ShowStudent()
+        {
             IEnumerable<StudentDTO> studentDtos = studentService.GetStudents();
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentDTO, StudentViewModel>()).CreateMapper();
             var students = mapper.Map<IEnumerable<StudentDTO>, List<StudentViewModel>>(studentDtos);
@@ -50,6 +53,42 @@ namespace PL.Controllers
             }
             ViewBag.groups = groups;
             return View(studentGroup);
+        }
+
+        public ActionResult StudentReport(int idStudent)
+        {
+            StudentDTO studentDTO = studentService.GetStudent(idStudent);
+            studentDTO = studentService.GetStudentAvg(idStudent);
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentDTO, StudentViewModel>()).CreateMapper();
+            var studentVM = mapper.Map<StudentDTO,StudentViewModel>(studentDTO);
+
+            ViewBag.studentName = studentVM.Name;
+            ViewBag.studentGroup = educationService.GetStudentGroup(idStudent).Name;                       
+            ViewBag.studentAvg = studentVM.StudentAvg;
+
+            Dictionary<string, int> subjectResult = educationService.GetStudentReport(idStudent);
+            return View(subjectResult);
+        } 
+
+        // Home/CreateStudent
+        [HttpGet]
+        public ActionResult CreateStudent()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult CreateStudent(StudentViewModel studentVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentViewModel, StudentDTO>()).CreateMapper();
+                StudentDTO student = mapper.Map<StudentViewModel, StudentDTO>(studentVM);
+
+                studentService.AddStudent(student);
+                return RedirectToAction("Index");
+            }
+
+            return View(studentVM);
         }
 
         public ActionResult About()

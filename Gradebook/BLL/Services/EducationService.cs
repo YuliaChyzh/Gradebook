@@ -53,8 +53,9 @@ namespace BLL.Services
         public GroupDTO GetStudentGroup(int idStudent)
         {
             Student student = Database.StudentsRepository.FindById(idStudent);
+            Group group = Database.GroupsRepository.Get().Where(o => o.Id == student.IdGroup).FirstOrDefault();
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Group, GroupDTO>()).CreateMapper();
-            return mapper.Map<Group, GroupDTO>(student.Group);
+            return mapper.Map<Group, GroupDTO>(group);
         }
 
         public void SetGroupName(int idEducation)
@@ -62,6 +63,26 @@ namespace BLL.Services
             Education education = Database.EducationsRepository.FindById(idEducation);
             GroupDTO groupDTO = GetStudentGroup(education.IdStudent);
             education.GroupName = groupDTO.Name;
+        }
+
+        public SubjectDTO GetSubject(int idSubject)
+        {
+            var subject = Database.SubjectsRepository.FindById(idSubject);
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Subject, SubjectDTO>()).CreateMapper();
+            return mapper.Map<Subject, SubjectDTO>(subject);
+        }
+
+        public Dictionary<string, int> GetStudentReport(int idStudent)
+        {
+            IEnumerable<Education> educations = Database.EducationsRepository.Get().Where(o => o.IdStudent == idStudent);
+            Dictionary<string, int> subjectResult = new Dictionary<string, int>();
+
+            foreach (Education education in educations)
+            {
+                subjectResult.Add(GetSubject(education.IdSubject).Name, education.SubjectResult);
+            }
+
+            return subjectResult;
         }
 
         public void Dispose()

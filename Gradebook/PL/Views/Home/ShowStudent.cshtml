@@ -1,0 +1,28 @@
+﻿@using BLL.DTO
+@model Dictionary<PL.Models.StudentViewModel, GroupDTO>
+
+@{
+    ViewBag.Title = "ShowStudent";
+}
+
+<h2>ShowStudent</h2>
+
+<table class="table">
+
+
+    @foreach (var item in Model)
+    {
+    <tr>
+
+        <td>
+            <p>@item.Key.Name</p>
+        </td>
+        <td>
+            <p>@item.Value.Name</p>
+        </td>
+        <td>
+            <p>@Html.ActionLink("Переглянути результати студента", "StudentReport", "Home", new { idStudent = item.Key.Id }, null)</p>
+        </td>
+    </tr>
+    }
+</table>
