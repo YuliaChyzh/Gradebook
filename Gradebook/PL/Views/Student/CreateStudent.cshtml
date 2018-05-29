@@ -14,12 +14,12 @@
                 <input class="form-control" name="Name" value="@Model.Name" />
             </div>
             <div class="form-group">
-                <label for="IdGroup"> Group: </label>
-                <select id="countires" name="IdGroup">
+                <label for="GroupName"> Group: </label>
+                <select id="countires" name="GroupName">
                     <option value="">Група</option>
                     @foreach (var item in ViewBag.groups)
                     {
-                        <option>@item.Id</option>
+                        <option>@item.Name</option>
                     }
                  </select>
             </div>

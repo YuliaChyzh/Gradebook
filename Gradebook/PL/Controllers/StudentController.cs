@@ -80,8 +80,10 @@ namespace PL.Controllers
         {
             if (ModelState.IsValid)
             {
+                int groupId = groupService.Get().Where(g => g.Name == studentVM.GroupName).FirstOrDefault().Id;
                 var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentViewModel, StudentDTO>()).CreateMapper();
                 StudentDTO student = mapper.Map<StudentViewModel, StudentDTO>(studentVM);
+                student.IdGroup = groupId;
 
                 studentService.AddStudent(student);
                 return RedirectToAction("Index","Home");
