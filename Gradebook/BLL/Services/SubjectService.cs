@@ -46,7 +46,7 @@ namespace BLL.Services
         public SubjectDTO GetSubjectAvg(int idSubject)
         {
             Subject subject = Database.SubjectsRepository.FindById(idSubject);
-            subject.SubjectAvg = Database.EducationsRepository.Get().Where(o => o.Subject == subject).Average(num => Convert.ToInt64(num.SubjectResult));
+            subject.SubjectAvg = Database.EducationsRepository.Get().Where(o => o.IdSubject == subject.Id).Average(num => Convert.ToInt64(num.SubjectResult));
 
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Subject, SubjectDTO>()).CreateMapper();
             return mapper.Map<Subject, SubjectDTO>(subject);

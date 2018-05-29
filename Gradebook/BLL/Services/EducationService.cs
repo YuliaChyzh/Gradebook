@@ -24,8 +24,7 @@ namespace BLL.Services
 
         public EducationDTO GetEducation(int id)
         {
-            var education = Database.EducationsRepository.FindById(id);
-            
+            var education = Database.EducationsRepository.FindById(id);         
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Education, EducationDTO>()).CreateMapper();
             return mapper.Map<Education, EducationDTO>(education);
         }
@@ -42,11 +41,10 @@ namespace BLL.Services
             return mapper.Map<Education, EducationDTO>(education);
         }
 
-        public StudentDTO GetStudent(int idEducation)
+        public string GetStudentName(int idStudent)
         {
-            Education education = Database.EducationsRepository.FindById(idEducation);
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Student, StudentDTO>()).CreateMapper();
-            return mapper.Map<Student, StudentDTO>(education.Student);
+            Student student= Database.StudentsRepository.FindById(idStudent);
+            return student.Name;
 
         }
 
@@ -75,11 +73,24 @@ namespace BLL.Services
         public Dictionary<string, int> GetStudentReport(int idStudent)
         {
             IEnumerable<Education> educations = Database.EducationsRepository.Get().Where(o => o.IdStudent == idStudent);
-            Dictionary<string, int> subjectResult = new Dictionary<string, int>();
+            Dictionary<string, int> subjectResult = new Dictionary<string, int>();  //name of subject + subject result
 
             foreach (Education education in educations)
             {
                 subjectResult.Add(GetSubject(education.IdSubject).Name, education.SubjectResult);
+            }
+
+            return subjectResult;
+        }
+
+        public Dictionary<string,int> GetSubjectDetail(int idSubject)
+        {
+            IEnumerable<Education> educations = Database.EducationsRepository.Get().Where(o => o.IdSubject == idSubject);
+            Dictionary<string, int> subjectResult = new Dictionary<string, int>(); //name of student, which has this subject + subject result
+
+            foreach (Education education in educations)
+            {
+                subjectResult.Add(GetStudentName(education.IdStudent), education.SubjectResult);
             }
 
             return subjectResult;

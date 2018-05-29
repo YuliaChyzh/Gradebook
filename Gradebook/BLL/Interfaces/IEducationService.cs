@@ -11,10 +11,11 @@ namespace BLL.Interfaces
     {
         EducationDTO GetEducation(int idEducation);
         EducationDTO AddStudent(int idStudent, int idSubject, int subjectResult);
-        StudentDTO GetStudent(int idEducation);
+        string GetStudentName(int idStudent);
         GroupDTO GetStudentGroup(int idStudent);
         SubjectDTO GetSubject(int idSubject);
         Dictionary<string, int> GetStudentReport(int idStudent);
+        Dictionary<string, int> GetSubjectDetail(int idSubject);
         void SetGroupName(int idEducation);
         void Dispose();
     }

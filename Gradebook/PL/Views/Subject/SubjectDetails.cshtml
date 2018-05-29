@@ -1,14 +1,13 @@
 ﻿@model Dictionary<string, int>
 
 @{
-    ViewBag.Title = "StudentReport";
+    ViewBag.Title = "SubjectDetails";
 }
 
-<h2>StudentReport</h2>
+<h2>SubjectDetails</h2>
 
-<h3>@ViewBag.studentName</h3>
-<h3>@ViewBag.studentGroup</h3>
-<h3>@ViewBag.studentAvg</h3>
+<h3>@ViewBag.subjectName</h3>
+<h3>@ViewBag.subjectAvg</h3>
 
 <table class="table">
     @foreach (var item in Model)
@@ -23,5 +22,6 @@
         </tr>
     }
 </table>
+
 
 
