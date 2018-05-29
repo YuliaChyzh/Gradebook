@@ -10,7 +10,7 @@ namespace BLL.Interfaces
     public interface IGroupService
     {
         GroupDTO GetGroup(int id);
-        IEnumerable<GroupDTO> GetGroups();
+        IEnumerable<GroupDTO> Get();
         void Dispose();
     }
 }

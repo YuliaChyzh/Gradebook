@@ -1,0 +1,31 @@
+﻿@model PL.Models.StudentViewModel
+@{
+    ViewBag.Title = "CreateStudent";
+}
+
+<h2>CreateStudent</h2>
+
+<div class="card m-5">
+    <h5 class="card-header text-center">Додати нового студента</h5>
+    <div class="card-body">
+        <form class="p-a-1" asp-action="CreateStudent" method="post">
+            <div class="form-group">
+                <label asp-for="Name"> Name: </label>
+                <input class="form-control" asp-for="Name" value="@Model.Name" />
+            </div>
+            <div class="form-group">
+                <label asp-for="GroupId"> Group: </label>
+                <select id="countires" name="Groups">
+                    <option value="">Countries</option>
+                    @foreach (var item in ViewBag.groups)
+                    {
+                        <option>@item.Name</option>
+                    }
+                 </select>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit </button>
+            </div>
+        </form>
+    </div>
+</div>

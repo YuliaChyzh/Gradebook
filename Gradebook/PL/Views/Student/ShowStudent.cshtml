@@ -21,7 +21,7 @@
             <p>@item.Value.Name</p>
         </td>
         <td>
-            <p>@Html.ActionLink("Переглянути результати студента", "StudentReport", "Home", new { idStudent = item.Key.Id }, null)</p>
+            <p>@Html.ActionLink("Переглянути результати студента", "StudentReport", "Student", new { idStudent = item.Key.Id }, null)</p>
         </td>
     </tr>
     }

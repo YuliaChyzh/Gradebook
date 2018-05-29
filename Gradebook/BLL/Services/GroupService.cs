@@ -21,7 +21,7 @@ namespace BLL.Services
             Database = uow;
         }
 
-        public IEnumerable<GroupDTO> GetGroups()
+        public IEnumerable<GroupDTO> Get()
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Group, GroupDTO>()).CreateMapper();
             return mapper.Map<IEnumerable<Group>, List<GroupDTO>>(Database.GroupsRepository.Get());

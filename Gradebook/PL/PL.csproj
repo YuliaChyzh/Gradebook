@@ -376,6 +376,7 @@
     <Compile Include="App_Start\NinjectValidatorFactoryInitializer.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -467,9 +468,9 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Home\ShowStudent.cshtml" />
-    <Content Include="Views\Home\CreateStudent.cshtml" />
-    <Content Include="Views\Home\StudentReport.cshtml" />
+    <Content Include="Views\Student\StudentReport.cshtml" />
+    <Content Include="Views\Student\ShowStudent.cshtml" />
+    <Content Include="Views\Student\CreateStudent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
