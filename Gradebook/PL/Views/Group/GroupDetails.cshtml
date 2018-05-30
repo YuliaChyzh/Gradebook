@@ -1,0 +1,24 @@
+﻿@model IEnumerable<PL.Models.StudentViewModel>
+@{
+    ViewBag.Title = "GroupDetails";
+}
+
+<h2>GroupDetails</h2>
+
+<h3>Список групи @ViewBag.groupName:</h3>
+
+<table class="table">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <p>@item.Name</p>
+            </td>
+            <td>
+                <p>@item.StudentAvg</p>
+            </td>
+        </tr>
+    }
+</table>
+
+

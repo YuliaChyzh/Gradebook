@@ -56,6 +56,13 @@ namespace BLL.Services
             return mapper.Map<Student, StudentDTO>(student);
         }
 
+        public IEnumerable<StudentDTO> GetGroupList(int idGroup)
+        {
+            IEnumerable<Student> students = Database.StudentsRepository.Get().Where(g => g.IdGroup == idGroup);
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Student, StudentDTO>()).CreateMapper();
+            return mapper.Map<IEnumerable<Student>, IEnumerable<StudentDTO>>(students);
+        }
+
         public void Dispose()
         {
             Database.Dispose();

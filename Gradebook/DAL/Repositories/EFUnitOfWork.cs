@@ -38,7 +38,7 @@ namespace DAL.Repositories
             educationRepository = new Lazy<EducationRepository>(()=>new EducationRepository(db));
         }
 
-        public void Save()
+        public void SaveChanges()
         {
             db.SaveChanges();
         }

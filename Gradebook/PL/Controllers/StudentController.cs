@@ -86,9 +86,10 @@ namespace PL.Controllers
                 student.IdGroup = groupId;
 
                 studentService.AddStudent(student);
-                return RedirectToAction("Index","Home");
+                //return RedirectToAction("Index","Home");
+                return View("StudentRecord", studentVM);
             }
-            return View("StudentRecord", studentVM);
+            return View();
         }
 
         public ActionResult StudentRecord(StudentViewModel studentVM)

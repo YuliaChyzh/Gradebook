@@ -1,0 +1,27 @@
+﻿@model IEnumerable<PL.Models.GroupViewModel>
+
+@{
+    ViewBag.Title = "ShowSubject";
+}
+
+<h2>ShowSubject</h2>
+
+<table class="table">
+
+    @foreach (var item in Model)
+    {
+    <tr>
+
+        <td>
+            <p>@item.Name</p>
+        </td>
+        <td>
+            @Html.ActionLink("Список групи", "GroupDetails", "Group", new { idGroup = item.Id }, null)
+        </td>
+        <td>
+            @Html.ActionLink("Видалити групу", "DeleteGroup", "Group", new { idGroup = item.Id }, null) 
+        </td>
+    </tr>
+    }
+</table>
+

@@ -45,7 +45,6 @@ namespace BLL.Services
         {
             Student student= Database.StudentsRepository.FindById(idStudent);
             return student.Name;
-
         }
 
         public GroupDTO GetStudentGroup(int idStudent)

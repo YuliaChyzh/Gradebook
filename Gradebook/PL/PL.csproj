@@ -375,18 +375,21 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\NinjectValidatorFactoryInitializer.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\SubjectController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\EditModels\EditGroupViewModel.cs" />
     <Compile Include="Models\EducationViewModel.cs" />
     <Compile Include="Models\GroupViewModel.cs" />
     <Compile Include="Models\StudentViewModel.cs" />
     <Compile Include="Models\SubjectViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\EducationModule.cs" />
+    <Compile Include="Validation\Validation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
@@ -475,6 +478,9 @@
     <Content Include="Views\Subject\ShowSubject.cshtml" />
     <Content Include="Views\Student\StudentRecord.cshtml" />
     <Content Include="Views\Subject\SubjectDetails.cshtml" />
+    <Content Include="Views\Group\ShowGroups.cshtml" />
+    <Content Include="Views\Group\GroupDetails.cshtml" />
+    <Content Include="Views\Group\EditGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

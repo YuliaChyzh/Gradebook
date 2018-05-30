@@ -34,6 +34,19 @@ namespace BLL.Services
             return mapper.Map<Group, GroupDTO>(group);
         }
 
+        public bool DeleteGroup(int id, int countStudents)
+        {
+            Group group = Database.GroupsRepository.FindById(id);
+
+            if (group != null && countStudents == 0)
+                Database.GroupsRepository.Remove(group);
+            else
+                return false;
+
+            Database.SaveChanges();
+            return true;
+        }
+
         public void Dispose()
         {
             Database.Dispose();

@@ -13,6 +13,6 @@ namespace DAL.Interfaces
         IRepository<Subject> SubjectsRepository { get; }
         IRepository<Group> GroupsRepository { get; }
         IRepository<Education> EducationsRepository { get; }
-        void Save();
+        void SaveChanges();
      }
 }
