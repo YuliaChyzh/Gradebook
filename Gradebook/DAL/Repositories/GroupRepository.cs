@@ -35,9 +35,9 @@ namespace DAL.Repositories
         {
             return groupSet
                 .Where(p => p.Id == id)
+                .AsNoTracking()
                 .FirstOrDefault();
         }
-
         public void Create(Group item)
         {
             groupSet.Add(item);
@@ -45,7 +45,13 @@ namespace DAL.Repositories
         }
         public void Update(Group item)
         {
-            context.Entry(item).State = EntityState.Modified;
+            var c = groupSet.FirstOrDefault(g => g.Id == item.Id);
+               
+            if (c != null)
+            {
+                context.Entry(c).State = EntityState.Modified;
+                //context.Entry(c).Property("prop").IsModified = true;
+            }
             context.SaveChanges();
         }
         public void Remove(Group item)

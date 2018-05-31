@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<PL.Models.GroupViewModel>
 
 @{
-    ViewBag.Title = "ShowSubject";
+    ViewBag.Title = "ShowGroups";
 }
 
-<h2>ShowSubject</h2>
+<h2>ShowGroups</h2>
 
 <table class="table">
 
@@ -19,7 +19,10 @@
             @Html.ActionLink("Список групи", "GroupDetails", "Group", new { idGroup = item.Id }, null)
         </td>
         <td>
-            @Html.ActionLink("Видалити групу", "DeleteGroup", "Group", new { idGroup = item.Id }, null) 
+            @Html.ActionLink("Видалити групу", "DeleteGroup", "Group", new { idGroup = item.Id }, null)
+        </td>
+        <td>
+            @Html.ActionLink("Редагувати", "EditGroup", "Group", new { idGroup = item.Id }, null)
         </td>
     </tr>
     }

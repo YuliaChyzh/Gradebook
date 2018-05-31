@@ -30,6 +30,8 @@ namespace BLL.Services
         public GroupDTO GetGroup(int id)
         {
             var group = Database.GroupsRepository.FindById(id);
+            //group.Id = id;
+            if (group == null) return null;
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Group, GroupDTO>()).CreateMapper();
             return mapper.Map<Group, GroupDTO>(group);
         }
@@ -45,6 +47,16 @@ namespace BLL.Services
 
             Database.SaveChanges();
             return true;
+        }
+
+        public void EditGroup(GroupDTO groupDTO)
+        {
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<GroupDTO, Group>()).CreateMapper();
+            Group group = Database.GroupsRepository.FindById(groupDTO.Id);
+            group = mapper.Map<GroupDTO, Group>(groupDTO);
+
+            Database.GroupsRepository.Update(group);
+            Database.SaveChanges();
         }
 
         public void Dispose()

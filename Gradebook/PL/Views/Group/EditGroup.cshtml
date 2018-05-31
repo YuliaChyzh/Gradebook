@@ -1,106 +1,25 @@
 ﻿@model PL.Models.EditModels.EditGroupViewModel
-
 @{
-    Layout = "_Layout";
+    ViewBag.Title = "EditGroup";
 }
 
-<div>
-    <span>Назва групи: </span>
-    <input name="Name" value="@Model.Name" readonly />
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" data-name="FirstName">Змінити назву</button>
-</div>
+<h2>EditGroup</h2>
 
-<div class="modal fade" id="editModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Редагування</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+<div class="card m-5">
+    <h5 class="card-header text-center">Змінити назву групи @Model.Name</h5>
+    <div class="card-body">
+        <form class="p-a-1" action="/Group/EditGroup" method="post">
+            <div class="form-group">
+                <label for="Id"> Id: </label>
+                <input class="form-control" name="Id" value="@Model.Id" />
             </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="currentVal" class="col-form-label">Поточна назва:</label>
-                        <input name="currentVal" type="text" class="form-control" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="changeTo" class="col-form-label">Змінити на:</label>
-                        <input name="changeTo" class="form-control" />
-                    </div>
-                </form>
+            <div class="form-group">
+                <label for="Name"> Назва: </label>
+                <input class="form-control" name="Name" value="@Model.Name" />
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
-                <button type="button" class="btn btn-primary btn-accept">Відправити</button>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit </button>
             </div>
-        </div>
+        </form>
     </div>
 </div>
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/JS/Validation.js"></script>
-<script src="~/lib/bootstrap/js/dist/util.js"></script>
-<script src="~/lib/bootstrap/js/dist/modal.js"></script>
-<script>
-    $('#editModal').on('show.bs.modal', function (event) {
-        let button = $(event.relatedTarget);
-        let key = button.data("name");
-        let value = $("input[name=" + key).val();
-        $(".btn-accept").data("key", key);
-
-        var modal = $(this)
-        modal.find('.modal-title').text('Edit ' + key);
-        modal.find('input[name=currentVal]').val(value);
-    });
-
-    $(".btn-accept").on("click", function (ev) {
-        let inputChange = $("input[name=changeTo");
-        let button = $(ev.currentTarget);
-        let key = $(".btn-accept").data("key");
-
-        let validation = {
-            "Name": validationGroupNames,
-        }
-
-        if (!validation[key].call(this, inputChange))
-            return;
-
-        let editVM = {
-            "Id": @Model.Id,
-            "Name": "@Model.Name"
-        };
-
-        editVM[key] = inputChange.val();
-
-        console.log(JSON.stringify(editVM));
-
-        var a = $.ajax({
-            type: "POST",
-            url: "@Url.Action("EditGroup", "GroupHome")",
-            data: {
-                editVMJSON: JSON.stringify(editVM)
-            },
-            dataType: "json"
-        }).done(function (message) {
-            if (message.success) {
-                $("input[name=" + key).val(editVM[key]);
-        });
-        $('#editModal').modal("hide");
-    });
-
-    $('#editModal').on("hide.bs.modal", function () {
-        let inputChange = $("input[name=changeTo");
-        if (inputChange.has("type"))
-            inputChange.removeAttr("type");
-
-        $("input[name=currentVal]").val("");
-        $("input[name=changeTo").val("");
-        $("input[name=currentVal]").attr("type", "text");
-        $("input[name=changeTo]").attr("type", "text");
-        $(".btn-accept").removeAttr("data-key");
-
-        _removeClass($("input[name=changeTo"), _nonValidationClass);
-    });
-</script>

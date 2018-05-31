@@ -10,6 +10,7 @@ using AutoMapper;
 using BLL.Infrastructure;
 using Newtonsoft.Json;
 using PL.Models.EditModels;
+using PL.Validation;
 
 namespace PL.Controllers
 {
@@ -81,43 +82,41 @@ namespace PL.Controllers
         {
             GroupDTO groupDTO = groupService.GetGroup(idGroup);
 
-            EditGroupViewModel editgroupVM = new EditGroupViewModel()
+            EditGroupViewModel editGroupVM = new EditGroupViewModel()
             {
                 Id = groupDTO.Id,
                 Name = groupDTO.Name
             };
 
-            return View("EditGroup", editgroupVM);
+            return View("EditGroup", editGroupVM);
         }
 
         [HttpPost]
-        public ActionResult EditProfile(string editVMJSON)
-        {
-            /*IMapper mapperUser = new MapperConfiguration(cfg => cfg.CreateMap<EditViewModel, UserDTO>()).CreateMapper();
-            EditViewModel editVM = JsonConvert.DeserializeObject<EditViewModel>(editVMJSON);
-
+        public ActionResult EditGroup(EditGroupViewModel editGroupVM)
+        {                     
             Validate validate = new Validate();
-            if (!(validate.ValidationName(editVM.FirstName) && validate.ValidationName(editVM.LastName) && validate.ValidationPhone(editVM.Phone) && validate.ValidationEmail(editVM.Email)))
-                return Json(new { Success = false });
+            if (!(validate.ValidationGroupName(editGroupVM.Name))) return Json(new { Success = false });
 
-            RoleDTO roleDTO = null;
-            if (editVM.IsAdmin)
-                roleDTO = roleService.GetAllRoles().Where(r => r.Name == "Admin").First();
-            else
-                roleDTO = roleService.GetAllRoles().Where(r => r.Name == "User").First();
+            GroupDTO groupDTO = groupService.GetGroup(editGroupVM.Id);
 
-            UserDTO userDTO = userService.GetUserById(editVM.UserId);
+            if (groupService.Get().ToList().Contains(groupService.Get().Where(g=>g.Name==editGroupVM.Name).FirstOrDefault()))
+                return Json(new { Success = false, Message = "Group with that name already exists" });
 
-            if (hotelService.GetHotelsForUser(userDTO.UserId).Where(h => h.UserId == userDTO.UserId).ToList().Count != 0)
-                return Json(new { Success = false, Message = "Delete all your hotels" });
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<EditGroupViewModel, GroupDTO>()).CreateMapper();
+            groupDTO = mapper.Map<EditGroupViewModel, GroupDTO>(editGroupVM);
 
-            userDTO = mapperUser.Map<EditViewModel, UserDTO>(editVM);
-            userDTO.RoleDTO = roleDTO;
-            userDTO.RoleId = roleDTO.RoleId;
+            groupService.EditGroup(groupDTO);
+            //return View("RecordGroup", groupDTO);
 
-            userService.EditUser(userDTO);
+            IEnumerable<GroupDTO> groupDtos = groupService.Get();
+            var mapperGroups = new MapperConfiguration(cfg => cfg.CreateMap<GroupDTO, GroupViewModel>()).CreateMapper();
+            var groups = mapperGroups.Map<IEnumerable<GroupDTO>, List<GroupViewModel>>(groupDtos);
+            return View("ShowGroups", groups);
+        }
 
-            return Json(new { Success = true });*/
+        public ActionResult RecordGroup(GroupDTO groupDTO)
+        {
+            return View(groupDTO);
         }
 
     }
