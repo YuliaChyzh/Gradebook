@@ -51,7 +51,10 @@ namespace BLL.Services
         public StudentDTO GetStudentAvg(int idStudent)
         {
             Student student = Database.StudentsRepository.FindById(idStudent);
-            student.StudentAvg = Database.EducationsRepository.Get().Where(o => o.IdStudent == idStudent).Average(num => Convert.ToInt64(num.SubjectResult));
+            IEnumerable<Education> education = Database.EducationsRepository.Get().Where(o => o.IdStudent == idStudent);
+            if (education.Count() != 0)
+                student.StudentAvg = education.Average(num => Convert.ToInt64(num.SubjectResult));
+
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Student, StudentDTO>()).CreateMapper();
             return mapper.Map<Student, StudentDTO>(student);
         }
