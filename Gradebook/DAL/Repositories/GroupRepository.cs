@@ -22,18 +22,21 @@ namespace DAL.Repositories
         public IEnumerable<Group> Get()
         {
             return groupSet
+                .AsNoTracking()
                 .ToList();
         }
 
         public IEnumerable<Group> Get(Func<Group, bool> predicate)
         {
             return groupSet
+                .AsNoTracking()
                 .Where(predicate)
                 .ToList();
         }
         public Group FindById(int id)
         {
             return groupSet
+                .AsNoTracking()
                 .Where(p => p.Id == id)
                 .AsNoTracking()
                 .FirstOrDefault();
@@ -45,13 +48,13 @@ namespace DAL.Repositories
         }
         public void Update(Group item)
         {
-            var c = groupSet.Local.FirstOrDefault(g => g.Id == item.Id);
+            //var c = groupSet.Local.FirstOrDefault(g => g.Id == item.Id);
                
-            if (c != null)
-            {
-                context.Entry(c).State = EntityState.Detached;
-                //context.Entry(c).Property("prop").IsModified = true;
-            }
+            //if (c != null)
+            //{
+            //    context.Entry(c).State = EntityState.Detached;
+            //    //context.Entry(c).Property("prop").IsModified = true;
+            //}
             context.Entry(item).State = EntityState.Modified;
             context.SaveChanges();
         }
