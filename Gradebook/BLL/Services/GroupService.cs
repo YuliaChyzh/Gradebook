@@ -36,6 +36,13 @@ namespace BLL.Services
             return mapper.Map<Group, GroupDTO>(group);
         }
 
+        public void AddGroup(GroupDTO groupDTO)
+        {
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<GroupDTO, Group>()).CreateMapper();
+            Database.GroupsRepository.Create(mapper.Map<GroupDTO, Group>(groupDTO));
+            Database.SaveChanges();
+        }
+
         public bool DeleteGroup(int id, int countStudents)
         {
             Group group = Database.GroupsRepository.FindById(id);

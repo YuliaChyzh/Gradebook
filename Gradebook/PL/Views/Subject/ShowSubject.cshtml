@@ -5,22 +5,29 @@
 }
 
 <h2>ShowSubject</h2>
+<p>@Html.ActionLink("Додати новий предмет", "CreateSubject", "Subject")</p>
 
 <table class="table">
-    
+
     @foreach (var item in Model)
     {
-    <tr>
+        <tr>
 
-        <td>
-            <p>@item.Name</p>
-        </td>
-        <td>
-            <p>@item.SubjectAvg</p>
-        </td>
-        <td>
-            <p>@Html.ActionLink("Деталі", "SubjectDetails", "Subject", new { idSubject = item.Id }, null)</p>
-        </td>
-    </tr>
+            <td>
+                <p>@item.Name</p>
+            </td>
+            <td>
+                <p>@item.SubjectAvg</p>
+            </td>
+            <td>
+                <p>@Html.ActionLink("Деталі", "SubjectDetails", "Subject", new { idSubject = item.Id }, null)</p>
+            </td>
+            <td>
+                @Html.ActionLink("Видалити предмет", "DeleteSubject", "Subject", new { idSubject = item.Id }, null)
+            </td>
+            <td>
+                @Html.ActionLink("Редагувати", "EditSubject", "Subject", new { idSubject = item.Id }, null)
+            </td>
+        </tr>
     }
 </table>

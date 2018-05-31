@@ -22,18 +22,21 @@ namespace DAL.Repositories
         public IEnumerable<Subject> Get()
         {
             return subjectSet
+                .AsNoTracking()
                 .ToList();
         }
 
         public IEnumerable<Subject> Get(Func<Subject, bool> predicate)
         {
             return subjectSet
+                .AsNoTracking()
                 .Where(predicate)
                 .ToList();
         }
         public Subject FindById(int id)
         {
             return subjectSet
+                .AsNoTracking()
                 .Where(p => p.Id == id)
                 .FirstOrDefault();
         }

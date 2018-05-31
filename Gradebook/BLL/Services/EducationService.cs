@@ -95,6 +95,13 @@ namespace BLL.Services
             return subjectResult;
         }
 
+        public IEnumerable<EducationDTO> GetSubbjectList(int idSubject)
+        {
+            IEnumerable<Education> educations = Database.EducationsRepository.Get().Where(s => s.IdSubject == idSubject);
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Education, EducationDTO>()).CreateMapper();
+            return mapper.Map<IEnumerable<Education>, IEnumerable<EducationDTO>>(educations);
+        }
+
         public void Dispose()
         {
             Database.Dispose();

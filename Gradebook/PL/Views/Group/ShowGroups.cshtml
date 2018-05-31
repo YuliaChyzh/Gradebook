@@ -5,15 +5,16 @@
 }
 
 <h2>ShowGroups</h2>
+<p>@Html.ActionLink("Додати нову групу", "CreateGroup", "Group")</p>
 
 <table class="table">
 
     @foreach (var item in Model)
     {
-    <tr>
+        <tr>
 
-        <td>
-            <p>@item.Name</p>
+            <td>
+<p>@item.Name</p>
         </td>
         <td>
             @Html.ActionLink("Список групи", "GroupDetails", "Group", new { idGroup = item.Id }, null)

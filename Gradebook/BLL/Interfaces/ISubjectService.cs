@@ -10,8 +10,9 @@ namespace BLL.Interfaces
     public interface ISubjectService
     {
         SubjectDTO GetSubject(int id);
-        IEnumerable<SubjectDTO> GetSubjects();
-        SubjectDTO AddSubject(string name);
+        IEnumerable<SubjectDTO> Get();
+        void AddSubject(SubjectDTO subjectDTO);
+        void EditSubject(SubjectDTO subjectDTO);
         SubjectDTO GetSubjectAvg(int id);
         void Dispose();
     }

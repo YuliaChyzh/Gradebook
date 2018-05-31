@@ -21,7 +21,7 @@ namespace BLL.Services
             Database = uow;
         }
 
-        public IEnumerable<SubjectDTO> GetSubjects()
+        public IEnumerable<SubjectDTO> Get()
         {         
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Subject, SubjectDTO>()).CreateMapper();
             return mapper.Map<IEnumerable<Subject>, List<SubjectDTO>>(Database.SubjectsRepository.Get());
@@ -34,13 +34,21 @@ namespace BLL.Services
             return mapper.Map<Subject, SubjectDTO>(subject);
         }
 
-        public SubjectDTO AddSubject(string name)
+        public void AddSubject(SubjectDTO subjectDTO)
         {
-            Subject subject = new Subject();
-            subject.Name = name;
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<SubjectDTO, Subject>()).CreateMapper();
+            Database.SubjectsRepository.Create(mapper.Map<SubjectDTO, Subject>(subjectDTO));
+            Database.SaveChanges();
+        }
 
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Subject, SubjectDTO>()).CreateMapper();
-            return mapper.Map<Subject, SubjectDTO>(subject);
+        public void EditSubject(SubjectDTO subjectDTO)
+        {
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<SubjectDTO, Subject>()).CreateMapper();
+            Subject subject = Database.SubjectsRepository.FindById(subjectDTO.Id);
+            subject = mapper.Map<SubjectDTO,Subject>(subjectDTO);
+
+            Database.SubjectsRepository.Update(subject);
+            Database.SaveChanges();
         }
 
         public SubjectDTO GetSubjectAvg(int idSubject)

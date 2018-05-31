@@ -17,6 +17,7 @@ namespace BLL.Interfaces
         Dictionary<string, int> GetStudentReport(int idStudent);
         Dictionary<string, int> GetSubjectDetail(int idSubject);
         void SetGroupName(int idEducation);
+        IEnumerable<EducationDTO> GetSubbjectList(int idSubject);
         void Dispose();
     }
 }

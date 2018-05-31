@@ -70,7 +70,7 @@ namespace PL.Controllers
                 return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
 
             if (groupService.Get().FirstOrDefault(r => r.Id == idGroup) == null)
-                return Json(new { Succes = false, Message = "Group isn`t exist" }, JsonRequestBehavior.AllowGet);
+                return Json(new { Succes = false, Message = "Group doesn`t exist" }, JsonRequestBehavior.AllowGet);
 
             if (studentList.Count() != 0)
                 return Json(new { Succes = false, Message = "It group have students yet" }, JsonRequestBehavior.AllowGet);
@@ -106,7 +106,6 @@ namespace PL.Controllers
             groupDTO = mapper.Map<EditGroupViewModel, GroupDTO>(editGroupVM);
 
             groupService.EditGroup(groupDTO);
-            //return View("RecordGroup", groupDTO);
 
             IEnumerable<GroupDTO> groupDtos = groupService.Get();
             var mapperGroups = new MapperConfiguration(cfg => cfg.CreateMap<GroupDTO, GroupViewModel>()).CreateMapper();
@@ -114,10 +113,34 @@ namespace PL.Controllers
             return View("ShowGroups", groups);
         }
 
-        public ActionResult RecordGroup(GroupDTO groupDTO)
+        /*public ActionResult RecordGroup(GroupDTO groupDTO)
         {
             return View(groupDTO);
-        }
+        }*/
 
+        
+        [HttpGet]
+        public ActionResult CreateGroup()
+        {
+            GroupViewModel groupVM = new GroupViewModel();
+            return View(groupVM);
+        }
+        [HttpPost]
+        public ActionResult CreateGroup(GroupViewModel groupVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var mapper = new MapperConfiguration(cfg => cfg.CreateMap<GroupViewModel, GroupDTO>()).CreateMapper();
+                GroupDTO groupDTO = mapper.Map<GroupViewModel, GroupDTO>(groupVM);
+                groupService.AddGroup(groupDTO);
+
+                IEnumerable<GroupDTO> groupDtos = groupService.Get();
+                var mapperGroups = new MapperConfiguration(cfg => cfg.CreateMap<GroupDTO, GroupViewModel>()).CreateMapper();
+                var groups = mapperGroups.Map<IEnumerable<GroupDTO>, List<GroupViewModel>>(groupDtos);
+                return View("ShowGroups", groups);
+            }
+            return View();
+        }
+        
     }
 }

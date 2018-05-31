@@ -48,13 +48,6 @@ namespace DAL.Repositories
         }
         public void Update(Group item)
         {
-            //var c = groupSet.Local.FirstOrDefault(g => g.Id == item.Id);
-               
-            //if (c != null)
-            //{
-            //    context.Entry(c).State = EntityState.Detached;
-            //    //context.Entry(c).Property("prop").IsModified = true;
-            //}
             context.Entry(item).State = EntityState.Modified;
             context.SaveChanges();
         }

@@ -1,14 +1,14 @@
-﻿@model PL.Models.EditModels.EditGroupViewModel
+﻿@model PL.Models.EditModels.EditSubjectViewModel
 @{
-    ViewBag.Title = "EditGroup";
+    ViewBag.Title = "EditSubject";
 }
 
-<h2>EditGroup</h2>
+<h2>EditSubject</h2>
 
 <div class="card m-5">
-    <h5 class="card-header text-center">Змінити назву групи @Model.Name</h5>
+    <h5 class="card-header text-center">Змінити назву предмета @Model.Name</h5>
     <div class="card-body">
-        <form class="p-a-1" action="/Group/EditGroup" method="post">
+        <form class="p-a-1" action="/Subject/EditSubject" method="post">
             <div class="form-group">
                 <label for="Id"> Id: </label>
                 <input class="form-control" name="Id" value="@Model.Id" readonly />
@@ -23,3 +23,4 @@
         </form>
     </div>
 </div>
+
