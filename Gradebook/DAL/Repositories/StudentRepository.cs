@@ -23,18 +23,21 @@ namespace DAL.Repositories
         public IEnumerable<Student> Get()
         {
             return studentSet
+                .AsNoTracking()
                 .ToList();
         }
 
         public IEnumerable<Student> Get(Func<Student, bool> predicate)
         {
             return studentSet
+                .AsNoTracking()
                 .Where(predicate)
                 .ToList();
         }
         public Student FindById(int id)
         {
             return studentSet
+                .AsNoTracking()
                 .Include(p => p.Group)
                 .Where(p => p.Id == id)
                 .FirstOrDefault();

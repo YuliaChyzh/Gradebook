@@ -8,6 +8,8 @@ using BLL.DTO;
 using PL.Models;
 using AutoMapper;
 using BLL.Infrastructure;
+using PL.Models.EditModels;
+using PL.Validation;
 
 namespace PL.Controllers
 {
@@ -30,7 +32,7 @@ namespace PL.Controllers
 
         public ActionResult ShowStudent()
         {
-            IEnumerable<StudentDTO> studentDtos = studentService.GetStudents();
+            IEnumerable<StudentDTO> studentDtos = studentService.Get().OrderBy(s=>s.Name);
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentDTO, StudentViewModel>()).CreateMapper();
             var students = mapper.Map<IEnumerable<StudentDTO>, List<StudentViewModel>>(studentDtos);
 
@@ -49,7 +51,7 @@ namespace PL.Controllers
             return View(studentGroup);
         }
 
-        public ActionResult StudentReport(int idStudent)
+        public ActionResult StudentDetails(int idStudent)
         {
             StudentDTO studentDTO = studentService.GetStudent(idStudent);
             studentDTO = studentService.GetStudentAvg(idStudent);
@@ -60,7 +62,7 @@ namespace PL.Controllers
             ViewBag.studentGroup = educationService.GetStudentGroup(idStudent).Name;
             ViewBag.studentAvg = studentVM.StudentAvg;
 
-            Dictionary<string, int> subjectResult = educationService.GetStudentReport(idStudent);
+            Dictionary<string, int> subjectResult = educationService.GetStudentDetail(idStudent);
             return View(subjectResult);
         }
 
@@ -92,11 +94,70 @@ namespace PL.Controllers
             return View();
         }
 
+        public ActionResult DeleteStudent(int idStudent)
+        {
+            IEnumerable<EducationDTO> eduList = educationService.GetStudentList(idStudent);
+
+            if (eduList.Count() == 0)
+                return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+            if (studentService.Get().FirstOrDefault(s => s.Id == idStudent) == null)
+                return Json(new { Succes = false, Message = "Student doesn`t exist" }, JsonRequestBehavior.AllowGet);
+
+            if (eduList.Count() != 0)
+                return Json(new { Succes = false, Message = "Student has some subjects yet" }, JsonRequestBehavior.AllowGet);
+
+            return Json(new { Success = false, Message = "Error" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult EditStudent(int idStudent)
+        {
+            StudentDTO studentDTO = studentService.GetStudent(idStudent);
+
+            EditStudentViewModel editStudentVM = new EditStudentViewModel()
+            {
+                Id = studentDTO.Id,
+                Name = studentDTO.Name,
+                StudentAvg = studentDTO.StudentAvg
+            };
+
+            educationService.SetGroupName(editStudentVM.Id);
+            var groups = groupService.Get();
+            ViewBag.groups = groups;
+
+            return View("EditStudent", editStudentVM);
+        }
+
+        [HttpPost]
+        public ActionResult EditStudent(EditStudentViewModel editStudentVM)
+        {
+            int groupId = groupService.Get().Where(g => g.Name == editStudentVM.GroupName).FirstOrDefault().Id;
+            if ((groupId!=0)) editStudentVM.IdGroup = groupId;
+            else return Json(new { Success = false, Message = "Input student group again" });
+
+            Validate validate = new Validate();
+            if (!(validate.ValidationStudentName(editStudentVM.Name))) return Json(new { Success = false, Message = "Input student name again" });
+
+            StudentDTO studentDTO = studentService.GetStudent(editStudentVM.Id);
+
+            if (studentService.Get().ToList().Contains(studentService.Get().Where(s => s.Name == editStudentVM.Name).FirstOrDefault()))
+                return Json(new { Success = false, Message = "Student with that name already exists" });
+
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<EditStudentViewModel, StudentDTO>()).CreateMapper();
+            studentDTO = mapper.Map<EditStudentViewModel, StudentDTO>(editStudentVM);
+
+            studentService.EditStudent(studentDTO);
+
+            return Json(new { Success = true, Message = "Дані студента оновлено" });
+        }
+
+
         public ActionResult StudentRecord(StudentViewModel studentVM)
         {
             ViewBag.studentGroup = educationService.GetStudentGroup(studentVM.Id).Name;
             return View(studentVM);
-        }       
+        }    
+        
+
 
         // GET: Student
         public ActionResult Index()

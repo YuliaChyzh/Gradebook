@@ -14,10 +14,11 @@ namespace BLL.Interfaces
         string GetStudentName(int idStudent);
         GroupDTO GetStudentGroup(int idStudent);
         SubjectDTO GetSubject(int idSubject);
-        Dictionary<string, int> GetStudentReport(int idStudent);
+        Dictionary<string, int> GetStudentDetail(int idStudent);
         Dictionary<string, int> GetSubjectDetail(int idSubject);
         void SetGroupName(int idEducation);
         IEnumerable<EducationDTO> GetSubbjectList(int idSubject);
+        IEnumerable<EducationDTO> GetStudentList(int idStudent);
         void Dispose();
     }
 }

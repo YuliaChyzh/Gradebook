@@ -21,8 +21,15 @@
             <p>@item.Value.Name</p>
         </td>
         <td>
-            <p>@Html.ActionLink("Переглянути результати студента", "StudentReport", "Student", new { idStudent = item.Key.Id }, null)</p>
+            <p>@Html.ActionLink("Деталі", "StudentDetails", "Student", new { idStudent = item.Key.Id }, null)</p>
         </td>
+        <td>
+            @Html.ActionLink("Видалити студента", "DeleteStudent", "Student", new { idStudent = item.Key.Id }, null)
+        </td>
+        <td>
+            @Html.ActionLink("Редагувати", "EditStudent", "Student", new { idStudent = item.Key.Id }, null)
+        </td>
+
     </tr>
     }
 </table>

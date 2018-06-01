@@ -22,7 +22,7 @@ namespace BLL.Services
             Database = uow;
         }
 
-        public IEnumerable<StudentDTO> GetStudents()
+        public IEnumerable<StudentDTO> Get()
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Student, StudentDTO>()).CreateMapper();
             return mapper.Map<IEnumerable<Student>, List<StudentDTO>>(Database.StudentsRepository.Get());
@@ -46,6 +46,16 @@ namespace BLL.Services
             Group group = Database.GroupsRepository.FindById(student.IdGroup);
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Group, GroupDTO>()).CreateMapper();
             return mapper.Map<Group, GroupDTO>(group);
+        }
+
+        public void EditStudent(StudentDTO studentDTO)
+        {
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentDTO, Student>()).CreateMapper();
+            Student student = Database.StudentsRepository.FindById(studentDTO.Id);
+            student = mapper.Map<StudentDTO, Student>(studentDTO);
+
+            Database.StudentsRepository.Update(student);
+            Database.SaveChanges();
         }
 
         public StudentDTO GetStudentAvg(int idStudent)

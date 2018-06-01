@@ -39,7 +39,7 @@ namespace PL.Controllers
 
         public ActionResult ShowGroups()
         {
-            IEnumerable<GroupDTO> groupDtos = groupService.Get();
+            IEnumerable<GroupDTO> groupDtos = groupService.Get().OrderBy(g=>g.Name);
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<GroupDTO, GroupViewModel>()).CreateMapper();
             var groups = mapper.Map<IEnumerable<GroupDTO>, List<GroupViewModel>>(groupDtos);
 
@@ -65,7 +65,7 @@ namespace PL.Controllers
         public ActionResult DeleteGroup(int idGroup)
         {
             IEnumerable<StudentDTO> studentList = studentService.GetGroupList(idGroup);
-            
+
             if (groupService.DeleteGroup(idGroup, studentList.Count()))
                 return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
 
@@ -93,13 +93,13 @@ namespace PL.Controllers
 
         [HttpPost]
         public ActionResult EditGroup(EditGroupViewModel editGroupVM)
-        {                     
+        {
             Validate validate = new Validate();
             if (!(validate.ValidationGroupName(editGroupVM.Name))) return Json(new { Success = false });
 
             GroupDTO groupDTO = groupService.GetGroup(editGroupVM.Id);
 
-            if (groupService.Get().ToList().Contains(groupService.Get().Where(g=>g.Name==editGroupVM.Name).FirstOrDefault()))
+            if (groupService.Get().ToList().Contains(groupService.Get().Where(g => g.Name == editGroupVM.Name).FirstOrDefault()))
                 return Json(new { Success = false, Message = "Group with that name already exists" });
 
             IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<EditGroupViewModel, GroupDTO>()).CreateMapper();
@@ -118,7 +118,7 @@ namespace PL.Controllers
             return View(groupDTO);
         }*/
 
-        
+
         [HttpGet]
         public ActionResult CreateGroup()
         {
@@ -141,6 +141,7 @@ namespace PL.Controllers
             }
             return View();
         }
+
         
     }
 }

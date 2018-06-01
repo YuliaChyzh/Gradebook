@@ -69,7 +69,7 @@ namespace BLL.Services
             return mapper.Map<Subject, SubjectDTO>(subject);
         }
 
-        public Dictionary<string, int> GetStudentReport(int idStudent)
+        public Dictionary<string, int> GetStudentDetail(int idStudent)
         {
             IEnumerable<Education> educations = Database.EducationsRepository.Get().Where(o => o.IdStudent == idStudent);
             Dictionary<string, int> subjectResult = new Dictionary<string, int>();  //name of subject + subject result
@@ -98,6 +98,13 @@ namespace BLL.Services
         public IEnumerable<EducationDTO> GetSubbjectList(int idSubject)
         {
             IEnumerable<Education> educations = Database.EducationsRepository.Get().Where(s => s.IdSubject == idSubject);
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Education, EducationDTO>()).CreateMapper();
+            return mapper.Map<IEnumerable<Education>, IEnumerable<EducationDTO>>(educations);
+        }
+
+        public IEnumerable<EducationDTO> GetStudentList(int idStudent)
+        {
+            IEnumerable<Education> educations = Database.EducationsRepository.Get().Where(s => s.IdStudent == idStudent);
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Education, EducationDTO>()).CreateMapper();
             return mapper.Map<IEnumerable<Education>, IEnumerable<EducationDTO>>(educations);
         }

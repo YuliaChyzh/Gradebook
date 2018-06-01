@@ -10,10 +10,11 @@ namespace BLL.Interfaces
     public interface IStudentService
     {
         StudentDTO GetStudent(int id);
-        IEnumerable<StudentDTO> GetStudents();
+        IEnumerable<StudentDTO> Get();
         void AddStudent(StudentDTO studentDTO);
         StudentDTO GetStudentAvg(int id);
         IEnumerable<StudentDTO> GetGroupList(int idGroup);
+        void EditStudent(StudentDTO studentDTO);
         void Dispose();
     }
 }

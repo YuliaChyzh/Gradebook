@@ -38,7 +38,7 @@ namespace PL.Controllers
 
         public ActionResult ShowSubject()
         {
-            IEnumerable<SubjectDTO> subjectDtos = subjectService.Get();
+            IEnumerable<SubjectDTO> subjectDtos = subjectService.Get().OrderBy(s=>s.Name);
             List<SubjectDTO> subjectList = new List<SubjectDTO>();
             foreach (var item in subjectDtos)
             {
