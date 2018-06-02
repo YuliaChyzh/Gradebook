@@ -35,6 +35,13 @@ namespace BLL.Services
             return mapper.Map<Student, StudentDTO>(student);
         }
 
+        public void DeleteStudent(int id)
+        {
+            Student student = Database.StudentsRepository.FindById(id);
+            Database.StudentsRepository.Remove(student);
+            Database.SaveChanges();
+        }
+
         public void AddStudent(StudentDTO studentDTO)
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentDTO, Student>()).CreateMapper();

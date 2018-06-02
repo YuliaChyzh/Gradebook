@@ -61,9 +61,18 @@ namespace PL.Controllers
             ViewBag.studentName = studentVM.Name;
             ViewBag.studentGroup = educationService.GetStudentGroup(idStudent).Name;
             ViewBag.studentAvg = studentVM.StudentAvg;
+            ViewBag.studentId = studentVM.Id;
 
-            Dictionary<string, int> subjectResult = educationService.GetStudentDetail(idStudent);
-            return View(subjectResult);
+            IEnumerable<EducationDTO> eduDTOs = educationService.Get().Where(e => e.IdStudent == idStudent);
+            mapper = new MapperConfiguration(cfg => cfg.CreateMap<EducationDTO, EducationViewModel>()).CreateMapper();
+            var educationVMs = mapper.Map<IEnumerable<EducationDTO>,IEnumerable<EducationViewModel>>(eduDTOs);
+
+            foreach (var e in educationVMs)
+            {
+                e.SubjectName = educationService.SetSubjectName(e.Id);
+            }
+
+            return View(educationVMs);
         }
 
         // Student/CreateStudent
@@ -82,6 +91,14 @@ namespace PL.Controllers
         {
             if (ModelState.IsValid)
             {
+                Validate validate = new Validate();
+                if (!(validate.ValidationStudentName(studentVM.Name))) return Json(new { Success = false, Message = "Input student name again" });
+
+                StudentDTO studentDTO = studentService.GetStudent(studentVM.Id);
+
+                if (studentService.Get().ToList().Contains(studentService.Get().Where(s => s.Name == studentVM.Name).FirstOrDefault()))
+                    return Json(new { Success = false, Message = "Student with that name already exists" });
+
                 int groupId = groupService.Get().Where(g => g.Name == studentVM.GroupName).FirstOrDefault().Id;
                 var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentViewModel, StudentDTO>()).CreateMapper();
                 StudentDTO student = mapper.Map<StudentViewModel, StudentDTO>(studentVM);
@@ -99,7 +116,11 @@ namespace PL.Controllers
             IEnumerable<EducationDTO> eduList = educationService.GetStudentList(idStudent);
 
             if (eduList.Count() == 0)
+            {
+                studentService.DeleteStudent(idStudent);
                 return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+            }
+                
             if (studentService.Get().FirstOrDefault(s => s.Id == idStudent) == null)
                 return Json(new { Succes = false, Message = "Student doesn`t exist" }, JsonRequestBehavior.AllowGet);
 
@@ -149,6 +170,70 @@ namespace PL.Controllers
 
             return Json(new { Success = true, Message = "Дані студента оновлено" });
         }
+
+        [HttpGet]
+        public ActionResult AddSubject(int idStudent)
+        {
+            EducationViewModel educationVM = new EducationViewModel();
+            educationVM.IdStudent = idStudent;
+
+            var subjects = subjectService.Get();
+            ViewBag.subjects = subjects;
+
+            return View("AddSubject", educationVM);
+        }
+        [HttpPost]
+        public ActionResult AddSubject(EducationViewModel educationVM)
+        {
+            if (ModelState.IsValid)
+            {
+                Validate validate = new Validate();
+                if (!(validate.ValidationSubjectRes(educationVM.SubjectResult))) return Json(new { Success = false, Message = "Input subject result again" });
+
+                int subjectId = subjectService.Get().Where(s => s.Name == educationVM.SubjectName).FirstOrDefault().Id;
+                educationVM.IdSubject = subjectId;
+
+                if (educationService.Get().ToList().Contains(educationService.Get().Where(s => s.IdStudent == educationVM.IdStudent).Where(s => s.IdSubject == educationVM.IdSubject).FirstOrDefault()))
+                    return Json(new { Success = false, Message = "Student already has this subject" });
+
+                var mapper = new MapperConfiguration(cfg => cfg.CreateMap<EducationViewModel, EducationDTO>()).CreateMapper();
+                EducationDTO educationDTO = mapper.Map<EducationViewModel, EducationDTO>(educationVM);
+
+                educationService.AddSubject(educationDTO);
+                return Json(new { Success = true, Message = "Предмет додано до даних студента" });
+            }
+            return View();
+        }
+
+        public ActionResult DeleteEducation(int idEducation)
+        {
+            educationService.DeleteEducation(idEducation);
+            return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult EditEducation(int idEducation)
+        {
+            EducationDTO educationDTO = educationService.GetEducation(idEducation);
+            
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<EducationDTO, EducationViewModel>()).CreateMapper();
+            EducationViewModel educationVM = mapper.Map<EducationDTO, EducationViewModel>(educationDTO);
+            educationVM.SubjectName=educationService.SetSubjectName(educationVM.Id);
+            return View("EditEducation", educationVM);
+        }
+
+        [HttpPost]
+        public ActionResult EditEducation(EducationViewModel educationVM)
+        {
+            educationVM.IdSubject= subjectService.Get().Where(s => s.Name == educationVM.SubjectName).FirstOrDefault().Id;
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<EducationViewModel,EducationDTO>()).CreateMapper();
+            EducationDTO educationDTO = mapper.Map<EducationViewModel, EducationDTO>(educationVM);
+
+
+            educationService.EditEducation(educationDTO);
+            return Json(new { Success = true, Message = "Дані про предмет оновлено" });
+        }
+
 
 
         public ActionResult StudentRecord(StudentViewModel studentVM)

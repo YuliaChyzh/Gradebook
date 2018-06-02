@@ -1,4 +1,4 @@
-﻿@model Dictionary<string, int>
+﻿@model IEnumerable<PL.Models.EducationViewModel>
 
 @{
     ViewBag.Title = "StudentDetails";
@@ -10,17 +10,24 @@
 <h3>@ViewBag.studentGroup</h3>
 <h3>@ViewBag.studentAvg</h3>
 
+@Html.ActionLink("Додати новий предмет студенту","AddSubject", "Student", new { idStudent = ViewBag.studentId }, null)
 <table class="table">
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                <p>@item.Key</p>
-            </td>
-            <td>
-                <p>@item.Value</p>
-            </td>
-        </tr>
+    <tr>
+        <td>
+            <p>@item.SubjectName</p>
+        </td>
+        <td>
+            <p>@item.SubjectResult</p>
+        </td>
+        <td>
+            @Html.ActionLink("Видалити запис", "DeleteEducation", "Student", new { idEducation = @item.Id }, null)
+        </td>
+        <td>
+            @Html.ActionLink("Редагувати запис", "EditEducation", "Student", new { idEducation = @item.Id }, null)
+        </td>
+    </tr>
     }
 </table>
 

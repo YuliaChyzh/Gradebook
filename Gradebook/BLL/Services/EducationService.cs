@@ -22,6 +22,12 @@ namespace BLL.Services
             Database = uow;
         }
 
+        public IEnumerable<EducationDTO> Get()
+        {
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Education, EducationDTO>()).CreateMapper();
+            return mapper.Map<IEnumerable<Education>, List<EducationDTO>>(Database.EducationsRepository.Get());
+        }
+
         public EducationDTO GetEducation(int id)
         {
             var education = Database.EducationsRepository.FindById(id);         
@@ -29,16 +35,27 @@ namespace BLL.Services
             return mapper.Map<Education, EducationDTO>(education);
         }
 
-        public EducationDTO AddStudent(int idStudent, int idSubject, int subjectResult)
+        public void AddSubject(EducationDTO educationDTO)
         {
-            Education education = new Education();
-            Student student= Database.StudentsRepository.FindById(idStudent);
-            education.IdStudent = idStudent;
-            education.IdSubject = idSubject;
-            SetGroupName(education.Id);
-            education.SubjectResult = subjectResult;
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Education, EducationDTO>()).CreateMapper();
-            return mapper.Map<Education, EducationDTO>(education);
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<EducationDTO, Education>()).CreateMapper();
+            Database.EducationsRepository.Create(mapper.Map<EducationDTO,Education>(educationDTO));
+        }
+
+        public void DeleteEducation(int id)
+        {
+            Education education = Database.EducationsRepository.FindById(id);
+            Database.EducationsRepository.Remove(education);
+            Database.SaveChanges();
+        }
+
+        public void EditEducation(EducationDTO educationDTO)
+        {
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<EducationDTO, Education>()).CreateMapper();
+            Education education = Database.EducationsRepository.FindById(educationDTO.Id);
+            education = mapper.Map<EducationDTO, Education>(educationDTO);
+
+            Database.EducationsRepository.Update(education);
+            Database.SaveChanges();
         }
 
         public string GetStudentName(int idStudent)
@@ -60,6 +77,21 @@ namespace BLL.Services
             Education education = Database.EducationsRepository.FindById(idEducation);
             GroupDTO groupDTO = GetStudentGroup(education.IdStudent);
             education.GroupName = groupDTO.Name;
+        }
+
+        public SubjectDTO GetStudentSubject(int idEducation)
+        {
+            Education education = Database.EducationsRepository.FindById(idEducation);
+            Subject subject = Database.SubjectsRepository.Get().Where(s => s.Id == education.IdSubject).FirstOrDefault();
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Subject, SubjectDTO>()).CreateMapper();
+            return mapper.Map<Subject, SubjectDTO>(subject);
+        }
+
+        public string SetSubjectName(int idEducation)
+        {
+            Education education = Database.EducationsRepository.FindById(idEducation);
+            SubjectDTO subjectDTO = GetStudentSubject(education.Id);
+            return subjectDTO.Name;
         }
 
         public SubjectDTO GetSubject(int idSubject)

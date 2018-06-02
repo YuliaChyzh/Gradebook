@@ -69,7 +69,11 @@ namespace PL.Controllers
             IEnumerable<EducationDTO> eduList = educationService.GetSubbjectList(idSubject);
 
             if (eduList.Count()==0)
+            {
+                subjectService.DeleteSubject(idSubject);
                 return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+            }
+                
             if (subjectService.Get().FirstOrDefault(s=>s.Id==idSubject)==null)
                 return Json(new { Succes = false, Message = "Subject doesn`t exist" }, JsonRequestBehavior.AllowGet);
 
@@ -123,8 +127,16 @@ namespace PL.Controllers
         {
             if (ModelState.IsValid)
             {
+                Validate validate = new Validate();
+                if (!(validate.ValidationSubjectName(subjectVM.Name))) return Json(new { Success = false, Message = "Input subject name again" });
+
+                SubjectDTO subjectDTO = subjectService.GetSubject(subjectVM.Id);
+
+                if (subjectService.Get().ToList().Contains(subjectService.Get().Where(s => s.Name == subjectVM.Name).FirstOrDefault()))
+                    return Json(new { Success = false, Message = "Subject with that name already exists" });
+
                 var mapper = new MapperConfiguration(cfg => cfg.CreateMap<SubjectViewModel, SubjectDTO>()).CreateMapper();
-                SubjectDTO subjectDTO = mapper.Map<SubjectViewModel, SubjectDTO>(subjectVM);
+                subjectDTO = mapper.Map<SubjectViewModel, SubjectDTO>(subjectVM);
                 subjectService.AddSubject(subjectDTO);
 
                 return Json(new { Success = true, Message = "Предмет додано" });

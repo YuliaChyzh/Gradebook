@@ -64,10 +64,7 @@ namespace PL.Controllers
 
         public ActionResult DeleteGroup(int idGroup)
         {
-            IEnumerable<StudentDTO> studentList = studentService.GetGroupList(idGroup);
-
-            if (groupService.DeleteGroup(idGroup, studentList.Count()))
-                return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+            IEnumerable<StudentDTO> studentList = studentService.GetGroupList(idGroup);         
 
             if (groupService.Get().FirstOrDefault(r => r.Id == idGroup) == null)
                 return Json(new { Succes = false, Message = "Group doesn`t exist" }, JsonRequestBehavior.AllowGet);
@@ -75,7 +72,8 @@ namespace PL.Controllers
             if (studentList.Count() != 0)
                 return Json(new { Succes = false, Message = "It group have students yet" }, JsonRequestBehavior.AllowGet);
 
-            return Json(new { Success = false, Message = "Error" }, JsonRequestBehavior.AllowGet);
+            groupService.DeleteGroup(idGroup);
+            return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult EditGroup(int idGroup)
@@ -130,8 +128,16 @@ namespace PL.Controllers
         {
             if (ModelState.IsValid)
             {
+                Validate validate = new Validate();
+                if (!(validate.ValidationGroupName(groupVM.Name))) return Json(new { Success = false });
+
+                GroupDTO groupDTO = groupService.GetGroup(groupVM.Id);
+
+                if (groupService.Get().ToList().Contains(groupService.Get().Where(g => g.Name == groupVM.Name).FirstOrDefault()))
+                    return Json(new { Success = false, Message = "Group with that name already exists" });
+
                 var mapper = new MapperConfiguration(cfg => cfg.CreateMap<GroupViewModel, GroupDTO>()).CreateMapper();
-                GroupDTO groupDTO = mapper.Map<GroupViewModel, GroupDTO>(groupVM);
+                groupDTO = mapper.Map<GroupViewModel, GroupDTO>(groupVM);
                 groupService.AddGroup(groupDTO);
 
                 IEnumerable<GroupDTO> groupDtos = groupService.Get();

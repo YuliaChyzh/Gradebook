@@ -11,7 +11,7 @@ namespace PL.Validation
         private static readonly Lazy<String> groupName = new Lazy<String>(() => @"^([\u0410-\u044F\u0406\u0407\u0490\u0404\u0456\u0457\u0491\u0454a-zA-Z]{1,2})?-([0-9]{2})$");
         private static readonly Lazy<String> subjectName = new Lazy<String>(() => @"^[\u0410-\u044F\u0406\u0407\u0490\u0404\u0456\u0457\u0491\u0454a-zA-Z ]{1,40}$");
         private static readonly Lazy<String> studentName = new Lazy<String>(() => @"^[\u0410-\u044F\u0406\u0407\u0490\u0404\u0456\u0457\u0491\u0454a-zA-Z ]{1,40}$");
-        private static readonly Lazy<String> subjectRes = new Lazy<String>(() => @"^\d{1,3}+$");
+        private static readonly Lazy<String> subjectRes = new Lazy<String>(() => @"^[0-9]{1,3}$");
         
         public static String GroupName => groupName.Value;
         public static String SubjectName => subjectName.Value;

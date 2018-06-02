@@ -12,9 +12,8 @@
     @foreach (var item in Model)
     {
         <tr>
-
-            <td>
-<p>@item.Name</p>
+        <td>
+            <p>@item.Name</p>
         </td>
         <td>
             @Html.ActionLink("Список групи", "GroupDetails", "Group", new { idGroup = item.Id }, null)

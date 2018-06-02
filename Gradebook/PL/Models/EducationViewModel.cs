@@ -15,10 +15,11 @@ namespace PL.Models
 
         [Required(ErrorMessage = "Choose subject")]
         public int IdSubject { get; set; }
+        public string SubjectName { get; set; }
 
         [Required(ErrorMessage = "Enter subject result")]
         [Range(0, 100,ErrorMessage = "Value for {0} must be between {1} and {2}.")]
-        [RegularExpression(@"^\d{1,3}+$", ErrorMessage = "Subject result is incorrect.")]
+        [RegularExpression(@"^[0-9]{1,3}$", ErrorMessage = "Subject result is incorrect.")]
         public int SubjectResult { get; set; }
     }
 }

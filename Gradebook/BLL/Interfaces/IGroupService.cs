@@ -12,7 +12,7 @@ namespace BLL.Interfaces
         GroupDTO GetGroup(int id);
         IEnumerable<GroupDTO> Get();
         void AddGroup(GroupDTO groupDTO);
-        bool DeleteGroup(int id, int countStudents);
+        void DeleteGroup(int id);
         void EditGroup(GroupDTO groupDTO);
         void Dispose();
     }

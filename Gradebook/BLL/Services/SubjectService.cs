@@ -34,6 +34,14 @@ namespace BLL.Services
             return mapper.Map<Subject, SubjectDTO>(subject);
         }
 
+        public void DeleteSubject(int id)
+        {
+            Subject subject = Database.SubjectsRepository.FindById(id);
+            Database.SubjectsRepository.Remove(subject);
+            Database.SaveChanges();
+        }
+
+
         public void AddSubject(SubjectDTO subjectDTO)
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<SubjectDTO, Subject>()).CreateMapper();

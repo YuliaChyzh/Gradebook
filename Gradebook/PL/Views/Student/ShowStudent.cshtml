@@ -6,7 +6,7 @@
 }
 
 <h2>ShowStudent</h2>
-
+@Html.ActionLink("Додати нового студента", "CreateStudent", "Student")
 <table class="table">
 
 
@@ -21,7 +21,7 @@
             <p>@item.Value.Name</p>
         </td>
         <td>
-            <p>@Html.ActionLink("Деталі", "StudentDetails", "Student", new { idStudent = item.Key.Id }, null)</p>
+            @Html.ActionLink("Деталі", "StudentDetails", "Student", new { idStudent = item.Key.Id }, null)
         </td>
         <td>
             @Html.ActionLink("Видалити студента", "DeleteStudent", "Student", new { idStudent = item.Key.Id }, null)
@@ -29,7 +29,11 @@
         <td>
             @Html.ActionLink("Редагувати", "EditStudent", "Student", new { idStudent = item.Key.Id }, null)
         </td>
+        <td>
+            @Html.ActionLink("Додати новий предмет студенту", "AddSubject", "Student", new { idStudent = item.Key.Id }, null)
+        </td>
 
     </tr>
     }
 </table>
+

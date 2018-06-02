@@ -43,17 +43,11 @@ namespace BLL.Services
             Database.SaveChanges();
         }
 
-        public bool DeleteGroup(int id, int countStudents)
+        public void DeleteGroup(int id)
         {
             Group group = Database.GroupsRepository.FindById(id);
-
-            if (group != null && countStudents == 0)
-                Database.GroupsRepository.Remove(group);
-            else
-                return false;
-
+            Database.GroupsRepository.Remove(group);
             Database.SaveChanges();
-            return true;
         }
 
         public void EditGroup(GroupDTO groupDTO)

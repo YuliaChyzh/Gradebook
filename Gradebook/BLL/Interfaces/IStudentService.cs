@@ -11,6 +11,7 @@ namespace BLL.Interfaces
     {
         StudentDTO GetStudent(int id);
         IEnumerable<StudentDTO> Get();
+        void DeleteStudent(int id);
         void AddStudent(StudentDTO studentDTO);
         StudentDTO GetStudentAvg(int id);
         IEnumerable<StudentDTO> GetGroupList(int idGroup);
