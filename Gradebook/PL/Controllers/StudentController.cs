@@ -152,12 +152,18 @@ namespace PL.Controllers
             if (ModelState.IsValid)
             {
                 Validate validate = new Validate();
-                if (!(validate.ValidationStudentName(studentVM.Name))) return Json(new { Success = false, Message = "Input student name again" });
-
+                if (!(validate.ValidationStudentName(studentVM.Name)))
+                {
+                    ViewBag.message = "Введіть ім'я студента ще раз";
+                    return View("Report");
+                }
                 StudentDTO studentDTO = studentService.GetStudent(studentVM.Id);
 
                 if (studentService.Get().ToList().Contains(studentService.Get().Where(s => s.Name == studentVM.Name).FirstOrDefault()))
-                    return Json(new { Success = false, Message = "Student with that name already exists" });
+                {
+                    ViewBag.message = "Студент з таким ім'ям ще існує";
+                    return View("Report");
+                }
 
                 int groupId = groupService.Get().Where(g => g.Name == studentVM.GroupName).FirstOrDefault().Id;
                 var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentViewModel, StudentDTO>()).CreateMapper();
@@ -165,8 +171,8 @@ namespace PL.Controllers
                 student.IdGroup = groupId;
 
                 studentService.AddStudent(student);
-                //return RedirectToAction("Index","Home");
-                return View("StudentRecord", studentVM);
+                ViewBag.message = "Студента успішно створено";
+                return View("Report");
             }
             return View();
         }
@@ -178,16 +184,24 @@ namespace PL.Controllers
             if (eduList.Count() == 0)
             {
                 studentService.DeleteStudent(idStudent);
-                return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+                ViewBag.message = "Студента успішно видалено";
+                return View("Report");
             }
                 
             if (studentService.Get().FirstOrDefault(s => s.Id == idStudent) == null)
-                return Json(new { Succes = false, Message = "Student doesn`t exist" }, JsonRequestBehavior.AllowGet);
+            {
+                ViewBag.message = "Студент не існує";
+                return View("Report");
+            }
 
             if (eduList.Count() != 0)
-                return Json(new { Succes = false, Message = "Student has some subjects yet" }, JsonRequestBehavior.AllowGet);
+            {
+                ViewBag.message = "Студент ще має предмети вивчення";
+                return View("Report");
+            }
 
-            return Json(new { Success = false, Message = "Error" }, JsonRequestBehavior.AllowGet);
+            ViewBag.message = "Помилка при видаленні";
+            return View("Report");
         }
 
         public ActionResult EditStudent(int idStudent)
@@ -213,22 +227,33 @@ namespace PL.Controllers
         {
             int groupId = groupService.Get().Where(g => g.Name == editStudentVM.GroupName).FirstOrDefault().Id;
             if ((groupId!=0)) editStudentVM.IdGroup = groupId;
-            else return Json(new { Success = false, Message = "Input student group again" });
+            else
+            {
+                ViewBag.message = "Оберіть групу";
+                return View("Report");
+            }
 
             Validate validate = new Validate();
-            if (!(validate.ValidationStudentName(editStudentVM.Name))) return Json(new { Success = false, Message = "Input student name again" });
+            if (!(validate.ValidationStudentName(editStudentVM.Name)))
+            {
+                ViewBag.message = "Введіть ім'я студента ще раз";
+                return View("Report");
+            }
 
             StudentDTO studentDTO = studentService.GetStudent(editStudentVM.Id);
 
             if (studentService.Get().ToList().Contains(studentService.Get().Where(s => s.Name == editStudentVM.Name).FirstOrDefault()))
-                return Json(new { Success = false, Message = "Student with that name already exists" });
+            {
+                ViewBag.message = "Студент з таким ім'ям вже існує";
+                return View("Report");
+            }
 
             IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<EditStudentViewModel, StudentDTO>()).CreateMapper();
             studentDTO = mapper.Map<EditStudentViewModel, StudentDTO>(editStudentVM);
 
             studentService.EditStudent(studentDTO);
-
-            return Json(new { Success = true, Message = "Дані студента оновлено" });
+            ViewBag.message = "Дані студента оновлено";
+            return View("Report");
         }
 
         [HttpGet]
@@ -248,19 +273,26 @@ namespace PL.Controllers
             if (ModelState.IsValid)
             {
                 Validate validate = new Validate();
-                if (!(validate.ValidationSubjectRes(educationVM.SubjectResult))) return Json(new { Success = false, Message = "Input subject result again" });
+                if (!(validate.ValidationSubjectRes(educationVM.SubjectResult))) {
+                    ViewBag.message = "Введіть оцінку ще раз";
+                    return View("Report");
+                }
 
                 int subjectId = subjectService.Get().Where(s => s.Name == educationVM.SubjectName).FirstOrDefault().Id;
                 educationVM.IdSubject = subjectId;
 
                 if (educationService.Get().ToList().Contains(educationService.Get().Where(s => s.IdStudent == educationVM.IdStudent).Where(s => s.IdSubject == educationVM.IdSubject).FirstOrDefault()))
-                    return Json(new { Success = false, Message = "Student already has this subject" });
+                {
+                    ViewBag.message = "Студент вже має такий предмет";
+                    return View("Report");
+                }
 
                 var mapper = new MapperConfiguration(cfg => cfg.CreateMap<EducationViewModel, EducationDTO>()).CreateMapper();
                 EducationDTO educationDTO = mapper.Map<EducationViewModel, EducationDTO>(educationVM);
 
                 educationService.AddSubject(educationDTO);
-                return Json(new { Success = true, Message = "Предмет додано до даних студента" });
+                ViewBag.message = "Предмет додано до даних студента";
+                return View("Report");
             }
             return View();
         }
@@ -268,7 +300,8 @@ namespace PL.Controllers
         public ActionResult DeleteEducation(int idEducation)
         {
             educationService.DeleteEducation(idEducation);
-            return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+            ViewBag.message = "Видалення успішне";
+            return View("Report");
 
         }
 
@@ -291,23 +324,14 @@ namespace PL.Controllers
 
 
             educationService.EditEducation(educationDTO);
-            return Json(new { Success = true, Message = "Дані про предмет оновлено" });
+            ViewBag.message = "Дані про предмет оновлено";
+            return View("Report");
         }
 
-
-
-        public ActionResult StudentRecord(StudentViewModel studentVM)
-        {
-            ViewBag.studentGroup = educationService.GetStudentGroup(studentVM.Id).Name;
-            return View(studentVM);
-        }    
-        
-
-
-        // GET: Student
-        public ActionResult Index()
+        public ActionResult Report()
         {
             return View();
         }
+
     }
 }

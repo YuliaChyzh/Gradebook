@@ -12,7 +12,7 @@
             <div class="form-group">
                 <div class="form-group">
                     <label for="IdStudent"> Студент (Id): </label>
-                    <input class="form-control" name="IdStudent" value="@Model.IdStudent" readonly/>
+                    <input class="form-control" name="IdStudent" value="@Model.IdStudent" readonly />
                 </div>
                 <label for="SubjectName"> Предмет: </label>
                 <select id="subjects" name="SubjectName">
@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label for="SubjectResult"> Оцінка: </label>
-                <input class="form-control" name="SubjectResult" type="number" max="100" min="1" value="@Model.SubjectResult"/>
+                <input class="form-control" name="SubjectResult" type="number" max="100" min="1" value="@Model.SubjectResult" />
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Submit </button>
@@ -32,4 +32,7 @@
         </form>
     </div>
 </div>
+
+<p>@Html.ActionLink("До списку студентів", "ShowStudent", "Student")</p>
+<p>@Html.ActionLink("На головну", "Index", "Home")</p>
 

@@ -8,6 +8,13 @@
 <p>@Html.ActionLink("Додати новий предмет", "CreateSubject", "Subject")</p>
 
 <table class="table">
+    <tr>
+        <td><p>Назва предмету</p></td>
+        <td><p>Середній бал по предмету</p></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
 
     @foreach (var item in Model)
     {
@@ -31,3 +38,5 @@
         </tr>
     }
 </table>
+
+<p>@Html.ActionLink("На головну", "Index", "Home")</p>

@@ -31,12 +31,6 @@ namespace PL.Controllers
             this.educationService = educationService;
         }
 
-        // GET: Group
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         public ActionResult ShowGroups()
         {
             IEnumerable<GroupDTO> groupDtos = groupService.Get().OrderBy(g=>g.Name);
@@ -65,16 +59,23 @@ namespace PL.Controllers
 
         public ActionResult DeleteGroup(int idGroup)
         {
-            IEnumerable<StudentDTO> studentList = studentService.GetGroupList(idGroup);         
+            IEnumerable<StudentDTO> studentList = studentService.GetGroupList(idGroup);
 
             if (groupService.Get().FirstOrDefault(r => r.Id == idGroup) == null)
-                return Json(new { Succes = false, Message = "Group doesn`t exist" }, JsonRequestBehavior.AllowGet);
+            {
+                ViewBag.message = "Такої групи не існує";
+                return View("Report");
+            }
 
             if (studentList.Count() != 0)
-                return Json(new { Succes = false, Message = "It group have students yet" }, JsonRequestBehavior.AllowGet);
+            {
+                ViewBag.message = "Група ще має студентів";
+                return View("Report");
+            }
 
             groupService.DeleteGroup(idGroup);
-            return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+            ViewBag.message = "Групу успішно видалено";
+            return View("Report");
         }
 
         public ActionResult EditGroup(int idGroup)
@@ -99,8 +100,11 @@ namespace PL.Controllers
             GroupDTO groupDTO = groupService.GetGroup(editGroupVM.Id);
 
             if (groupService.Get().ToList().Contains(groupService.Get().Where(g => g.Name == editGroupVM.Name).FirstOrDefault()))
-                return Json(new { Success = false, Message = "Group with that name already exists" });
-
+            {
+                ViewBag.message = "Група з таким ім'ям вже існує";
+                return View("Report");
+            }
+               
             IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<EditGroupViewModel, GroupDTO>()).CreateMapper();
             groupDTO = mapper.Map<EditGroupViewModel, GroupDTO>(editGroupVM);
 
@@ -111,12 +115,6 @@ namespace PL.Controllers
             var groups = mapperGroups.Map<IEnumerable<GroupDTO>, List<GroupViewModel>>(groupDtos);
             return View("ShowGroups", groups);
         }
-
-        /*public ActionResult RecordGroup(GroupDTO groupDTO)
-        {
-            return View(groupDTO);
-        }*/
-
 
         [HttpGet]
         public ActionResult CreateGroup()
@@ -135,8 +133,11 @@ namespace PL.Controllers
                 GroupDTO groupDTO = groupService.GetGroup(groupVM.Id);
 
                 if (groupService.Get().ToList().Contains(groupService.Get().Where(g => g.Name == groupVM.Name).FirstOrDefault()))
-                    return Json(new { Success = false, Message = "Group with that name already exists" });
-
+                {
+                    ViewBag.message = "Група з таким ім'ям вже існує";
+                    return View("Report");
+                }
+                   
                 var mapper = new MapperConfiguration(cfg => cfg.CreateMap<GroupViewModel, GroupDTO>()).CreateMapper();
                 groupDTO = mapper.Map<GroupViewModel, GroupDTO>(groupVM);
                 groupService.AddGroup(groupDTO);
@@ -149,6 +150,11 @@ namespace PL.Controllers
             return View();
         }
 
-        
+        public ActionResult Report()
+        {
+            return View();
+        }
+
+
     }
 }

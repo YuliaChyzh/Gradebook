@@ -30,12 +30,6 @@ namespace PL.Controllers
             this.educationService = educationService;
         }
 
-        // GET: Subject
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         public ActionResult ShowSubject()
         {
             IEnumerable<SubjectDTO> subjectDtos = subjectService.Get().OrderBy(s=>s.Name);
@@ -71,16 +65,24 @@ namespace PL.Controllers
             if (eduList.Count()==0)
             {
                 subjectService.DeleteSubject(idSubject);
-                return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+                ViewBag.message = "Предмет успішно видалено";
+                return View("Report");
             }
                 
             if (subjectService.Get().FirstOrDefault(s=>s.Id==idSubject)==null)
-                return Json(new { Succes = false, Message = "Subject doesn`t exist" }, JsonRequestBehavior.AllowGet);
+            {
+                ViewBag.message = "Предмет не існує";
+                return View("Report");
+            }
 
             if (eduList.Count() != 0)
-                return Json(new { Succes = false, Message = "Students have this subject yet" }, JsonRequestBehavior.AllowGet);
+            {
+                ViewBag.message = "Студенти ще мають цей предмет";
+                return View("Report");
+            }
 
-            return Json(new { Success = false, Message = "Error" }, JsonRequestBehavior.AllowGet);
+            ViewBag.message = "Помилка при видаленні";
+            return View("Report");
         }
 
         public ActionResult EditSubject(int idSubject)
@@ -101,19 +103,25 @@ namespace PL.Controllers
         public ActionResult EditSubject(EditSubjectViewModel editSubjectVM)
         {
             Validate validate = new Validate();
-            if (!(validate.ValidationSubjectName(editSubjectVM.Name))) return Json(new { Success = false, Message = "Input subject name again" });
+            if (!(validate.ValidationSubjectName(editSubjectVM.Name)))
+            {
+                ViewBag.message = "Введіть назву предмета ще раз";
+                return View("Report");
+            }
 
             SubjectDTO subjectDTO = subjectService.GetSubject(editSubjectVM.Id);
 
             if (subjectService.Get().ToList().Contains(subjectService.Get().Where(s => s.Name == editSubjectVM.Name).FirstOrDefault()))
-                return Json(new { Success = false, Message = "Subject with that name already exists" });
-
+            {
+                ViewBag.message = "Предмет з такою назвою вже існує";
+                return View("Report");
+            }
             IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<EditSubjectViewModel, SubjectDTO>()).CreateMapper();
             subjectDTO = mapper.Map<EditSubjectViewModel, SubjectDTO>(editSubjectVM);
 
             subjectService.EditSubject(subjectDTO);
-
-            return Json(new { Success = true, Message = "Предмет оновлено" });
+            ViewBag.message = "Предмет оновлено";
+            return View("Report");
         }
 
         [HttpGet]
@@ -128,19 +136,31 @@ namespace PL.Controllers
             if (ModelState.IsValid)
             {
                 Validate validate = new Validate();
-                if (!(validate.ValidationSubjectName(subjectVM.Name))) return Json(new { Success = false, Message = "Input subject name again" });
+                if (!(validate.ValidationSubjectName(subjectVM.Name))) {
+                    ViewBag.message = "Введіть назву предмета ще раз";
+                    return View("Report");
+                }
 
                 SubjectDTO subjectDTO = subjectService.GetSubject(subjectVM.Id);
 
                 if (subjectService.Get().ToList().Contains(subjectService.Get().Where(s => s.Name == subjectVM.Name).FirstOrDefault()))
-                    return Json(new { Success = false, Message = "Subject with that name already exists" });
+                {
+                    ViewBag.message = "Предмет з такою назвою вже існує";
+                    return View("Report");
+                }
 
                 var mapper = new MapperConfiguration(cfg => cfg.CreateMap<SubjectViewModel, SubjectDTO>()).CreateMapper();
                 subjectDTO = mapper.Map<SubjectViewModel, SubjectDTO>(subjectVM);
                 subjectService.AddSubject(subjectDTO);
 
-                return Json(new { Success = true, Message = "Предмет додано" });
+                ViewBag.message = "Предмет додано";
+                return View("Report");
             }
+            return View();
+        }
+
+        public ActionResult Report()
+        {
             return View();
         }
     }

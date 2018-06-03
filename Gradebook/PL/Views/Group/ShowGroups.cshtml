@@ -8,23 +8,29 @@
 <p>@Html.ActionLink("Додати нову групу", "CreateGroup", "Group")</p>
 
 <table class="table">
-
+    <tr>
+        <td><p>Назва групи</p></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
     @foreach (var item in Model)
     {
         <tr>
-        <td>
-            <p>@item.Name</p>
-        </td>
-        <td>
-            @Html.ActionLink("Список групи", "GroupDetails", "Group", new { idGroup = item.Id }, null)
-        </td>
-        <td>
-            @Html.ActionLink("Видалити групу", "DeleteGroup", "Group", new { idGroup = item.Id }, null)
-        </td>
-        <td>
-            @Html.ActionLink("Редагувати", "EditGroup", "Group", new { idGroup = item.Id }, null)
-        </td>
-    </tr>
+            <td>
+                <p>@item.Name</p>
+            </td>
+            <td>
+                @Html.ActionLink("Список групи", "GroupDetails", "Group", new { idGroup = item.Id }, null)
+            </td>
+            <td>
+                @Html.ActionLink("Видалити групу", "DeleteGroup", "Group", new { idGroup = item.Id }, null)
+            </td>
+            <td>
+                @Html.ActionLink("Редагувати", "EditGroup", "Group", new { idGroup = item.Id }, null)
+            </td>
+        </tr>
     }
 </table>
+<p>@Html.ActionLink("На головну", "Index", "Home")</p>
 

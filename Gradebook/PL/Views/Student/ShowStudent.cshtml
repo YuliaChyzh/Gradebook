@@ -15,9 +15,9 @@
         Група: <select id="groups" name="searchGroup" asp-for="searchGroup" asp-items="@ViewBag.groups">
             <option value="">Всі</option>
             @foreach (var item in ViewBag.groups)
-        {
-            <option>@item.Name</option>
-        }
+            {
+                <option>@item.Name</option>
+            }
         </select>
 
         Середній бал: <input name="searchStudentAvg" asp-for="searchStudentAvg" type="number" max="100" min="1" />
@@ -31,9 +31,9 @@
         Предмет: <select id="subjects" name="searchSubject" asp-for="searchSubject" asp-items="@ViewBag.subjects">
             <option value="">Всі</option>
             @foreach (var item in ViewBag.subjects)
-        {
-            <option>@item.Name</option>
-    }
+            {
+                <option>@item.Name</option>
+            }
         </select>
         <input type="submit" value="Шукати" />
     </p>
@@ -41,12 +41,18 @@
 
 
 <table class="table">
-
+    <tr>
+        <td><p>Ім'я студента</p></td>
+        <td><p>Група</p></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
 
     @foreach (var item in Model)
     {
         <tr>
-
             <td>
                 <p>@item.Key.Name</p>
             </td>
@@ -70,4 +76,6 @@
     }
 </table>
 <a>@ViewBag.message</a>
+
+<p>@Html.ActionLink("На головну", "Index", "Home")</p>
 

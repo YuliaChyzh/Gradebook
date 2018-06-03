@@ -478,18 +478,19 @@
     <Content Include="Views\Student\ShowStudent.cshtml" />
     <Content Include="Views\Student\CreateStudent.cshtml" />
     <Content Include="Views\Subject\ShowSubject.cshtml" />
-    <Content Include="Views\Student\StudentRecord.cshtml" />
+    <Content Include="Views\Student\Report.cshtml" />
     <Content Include="Views\Subject\SubjectDetails.cshtml" />
     <Content Include="Views\Group\ShowGroups.cshtml" />
     <Content Include="Views\Group\GroupDetails.cshtml" />
     <Content Include="Views\Group\EditGroup.cshtml" />
-    <Content Include="Views\Group\RecordGroup.cshtml" />
+    <Content Include="Views\Group\Report.cshtml" />
     <Content Include="Views\Subject\EditSubject.cshtml" />
     <Content Include="Views\Subject\CreateSubject.cshtml" />
     <Content Include="Views\Student\EditStudent.cshtml" />
     <Content Include="Views\Group\CreateGroup.cshtml" />
     <Content Include="Views\Student\AddSubject.cshtml" />
     <Content Include="Views\Student\EditEducation.cshtml" />
+    <Content Include="Views\Subject\Report.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -6,29 +6,38 @@
 
 <h2>StudentReport</h2>
 
-<h3>@ViewBag.studentName</h3>
-<h3>@ViewBag.studentGroup</h3>
-<h3>@ViewBag.studentAvg</h3>
+<h3>Ім'я студента: @ViewBag.studentName</h3>
+<h3>Група: @ViewBag.studentGroup</h3>
+<h3>Середній бал: @ViewBag.studentAvg</h3>
 
-@Html.ActionLink("Додати новий предмет студенту","AddSubject", "Student", new { idStudent = ViewBag.studentId }, null)
+@Html.ActionLink("Додати новий предмет студенту", "AddSubject", "Student", new { idStudent = ViewBag.studentId }, null)
 <table class="table">
+    <tr>
+        <td><p>Предмет</p></td>
+        <td><p>Оцінка</p></td>
+        <td></td>
+        <td></td>
+    </tr>
     @foreach (var item in Model)
     {
-    <tr>
-        <td>
-            <p>@item.SubjectName</p>
-        </td>
-        <td>
-            <p>@item.SubjectResult</p>
-        </td>
-        <td>
-            @Html.ActionLink("Видалити запис", "DeleteEducation", "Student", new { idEducation = @item.Id }, null)
-        </td>
-        <td>
-            @Html.ActionLink("Редагувати запис", "EditEducation", "Student", new { idEducation = @item.Id }, null)
-        </td>
-    </tr>
+        <tr>
+            <td>
+                <p>@item.SubjectName</p>
+            </td>
+            <td>
+                <p>@item.SubjectResult</p>
+            </td>
+            <td>
+                @Html.ActionLink("Видалити запис", "DeleteEducation", "Student", new { idEducation = @item.Id }, null)
+            </td>
+            <td>
+                @Html.ActionLink("Редагувати запис", "EditEducation", "Student", new { idEducation = @item.Id }, null)
+            </td>
+        </tr>
     }
 </table>
+
+<p>@Html.ActionLink("До списку студентів", "ShowStudent", "Student")</p>
+<p>@Html.ActionLink("На головну", "Index", "Home")</p>
 
 

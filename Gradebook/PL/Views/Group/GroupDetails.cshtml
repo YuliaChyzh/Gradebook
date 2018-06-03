@@ -8,6 +8,10 @@
 <h3>Список групи @ViewBag.groupName:</h3>
 
 <table class="table">
+    <tr>
+        <td><p>Ім'я студента</p></td>
+        <td><p>Середній бал</p></td>
+    </tr>
     @foreach (var item in Model)
     {
         <tr>
@@ -20,5 +24,8 @@
         </tr>
     }
 </table>
+<p>@Html.ActionLink("До списку груп", "ShowGroups", "Group")</p>
+<p>@Html.ActionLink("На головну", "Index", "Home")</p>
+
 
 
