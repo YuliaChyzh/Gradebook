@@ -13,7 +13,7 @@ namespace BLL.Interfaces
         IEnumerable<StudentDTO> Get();
         void DeleteStudent(int id);
         void AddStudent(StudentDTO studentDTO);
-        StudentDTO GetStudentAvg(int id);
+        double GetStudentAvg(int id);
         IEnumerable<StudentDTO> GetGroupList(int idGroup);
         void EditStudent(StudentDTO studentDTO);
         void Dispose();

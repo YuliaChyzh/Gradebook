@@ -30,31 +30,91 @@ namespace PL.Controllers
             this.educationService = educationService;
         }
 
-        public ActionResult ShowStudent()
+        [HttpGet]
+        public ActionResult ShowStudent(string searchName, string searchGroup, int? searchStudentAvg, string searchProgress, string searchSubject )
         {
-            IEnumerable<StudentDTO> studentDtos = studentService.Get().OrderBy(s=>s.Name);
+            var groups = groupService.Get();
+            ViewBag.groups = groups;
+            var subjects = subjectService.Get();
+            ViewBag.subjects = subjects;
+            foreach (var student in studentService.Get())
+            {
+                student.StudentAvg=studentService.GetStudentAvg(student.Id);
+            }
+
+            IEnumerable<StudentDTO> studentDtos = studentService.Get().OrderBy(s => s.Name);
+
+            if (!String.IsNullOrEmpty(searchName))
+            {
+                studentDtos = studentDtos.Where(s=>s.Name.ToUpper().Contains(searchName.ToUpper())).OrderBy(s => s.Name);
+            }
+
+            if (!String.IsNullOrEmpty(searchGroup))
+            {
+                int groupId = groupService.Get().Where(g => g.Name == searchGroup).FirstOrDefault().Id;
+                studentDtos = studentDtos.Where(s => s.IdGroup == groupId).OrderBy(s => s.Name);
+            }
+
+            if (!String.IsNullOrEmpty(searchStudentAvg.ToString()))
+            {
+                studentDtos = studentDtos.Where(s => s.StudentAvg==searchStudentAvg).OrderBy(s => s.Name);
+            }
+
+            if (!String.IsNullOrEmpty(searchProgress))
+            {
+                if (searchProgress == "Успішні")
+                    {
+                        studentDtos = studentDtos.Where(s => s.StudentAvg > 60).OrderBy(s => s.Name);
+                    }
+                    else if (searchProgress == "Неуспішні")
+                {
+                        studentDtos = studentDtos.Where(s => s.StudentAvg < 60).OrderBy(s => s.Name);
+                    }
+            }
+
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentDTO, StudentViewModel>()).CreateMapper();
             var students = mapper.Map<IEnumerable<StudentDTO>, List<StudentViewModel>>(studentDtos);
-
-            List<GroupDTO> groups = new List<GroupDTO>();
+            List<GroupDTO> groupsList = new List<GroupDTO>();
             foreach (var item in studentDtos)
             {
-                groups.Add(groupService.GetGroup(item.IdGroup));
+                groupsList.Add(groupService.GetGroup(item.IdGroup));
             }
             Dictionary<StudentViewModel, GroupDTO> studentGroup = new Dictionary<StudentViewModel, GroupDTO>();
-
             foreach (StudentViewModel studentVM in students)
             {
-                studentGroup.Add(studentVM, groups.FirstOrDefault(g => g.Id == studentVM.IdGroup));
+                studentGroup.Add(studentVM, groupsList.FirstOrDefault(g => g.Id == studentVM.IdGroup));
             }
-            ViewBag.groups = groups;
+
+            if (!String.IsNullOrEmpty(searchSubject))
+            {
+                studentGroup.Clear();
+                    int subjectId = subjectService.Get().Where(s => s.Name == searchSubject).FirstOrDefault().Id;
+                    IEnumerable<EducationDTO> educationDtos = educationService.Get().Where(s => s.IdSubject == subjectId);
+                    List<int> idStudents = new List<int>();
+                    List<StudentDTO> studDtos = new List<StudentDTO>();
+                    foreach (var id in idStudents)
+                    {
+                        studDtos.Add(studentService.GetStudent(id));
+                    }
+                    students = mapper.Map<List<StudentDTO>, List<StudentViewModel>>(studDtos);
+                    foreach (var item in studentDtos)
+                    {
+                        groupsList.Add(groupService.GetGroup(item.IdGroup));
+                    }
+                    foreach (StudentViewModel studentVM in students)
+                    {
+                        if (!studentGroup.ContainsKey(studentVM))
+                        studentGroup.Add(studentVM, groupsList.FirstOrDefault(g => g.Id == studentVM.IdGroup));
+                    }
+            }
+            if (studentGroup.Count() == 0) ViewBag.message = "Пошук не дав результатів";
             return View(studentGroup);
         }
 
         public ActionResult StudentDetails(int idStudent)
         {
             StudentDTO studentDTO = studentService.GetStudent(idStudent);
-            studentDTO = studentService.GetStudentAvg(idStudent);
+            studentDTO.StudentAvg = studentService.GetStudentAvg(idStudent);
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentDTO, StudentViewModel>()).CreateMapper();
             var studentVM = mapper.Map<StudentDTO, StudentViewModel>(studentDTO);
 

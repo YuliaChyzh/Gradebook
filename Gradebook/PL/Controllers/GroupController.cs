@@ -53,7 +53,8 @@ namespace PL.Controllers
 
             foreach (StudentDTO student in studentDtos)
             {
-                studentList.Add(studentService.GetStudentAvg(student.Id));
+                student.StudentAvg = studentService.GetStudentAvg(student.Id);
+                studentList.Add(student);
             }
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentDTO, StudentViewModel>()).CreateMapper();
             var students = mapper.Map<List<StudentDTO>, List<StudentViewModel>>(studentList);
