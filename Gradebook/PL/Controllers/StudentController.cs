@@ -97,30 +97,10 @@ namespace PL.Controllers
 
                 foreach (var student in studDtos)
                 {
-                    if (studentDtos.Contains(studentDtos.Where(s => s.Id == student.Id))) stud.Add(student);
+                    if (studentDtos.Contains(studentDtos.Where(s => s.Id == student.Id).FirstOrDefault())) stud.Add(student);
                 }
 
                 studentDtos = stud;
-
-                /*
-
-                students = mapper.Map<List<StudentDTO>, List<StudentViewModel>>(studDtos);
-
-                foreach (var student in students)
-                {
-                    student.StudentAvg = studentService.GetStudentAvg(student.Id);
-                }
-                groupsList.Clear();
-                foreach (var item in studDtos)
-                {
-                    groupsList.Add(groupService.GetGroup(item.IdGroup));
-                }
-                Dictionary<StudentViewModel, GroupDTO> res= new Dictionary<StudentViewModel, GroupDTO>();
-                foreach (StudentViewModel studentVM in students)
-                {
-                    if (studentGroup.ContainsKey(studentVM)) res.Add(studentVM, groupsList.FirstOrDefault(g => g.Id == studentVM.IdGroup));
-                }
-                studentGroup = res;*/
             }
 
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentDTO, StudentViewModel>()).CreateMapper();
@@ -135,7 +115,6 @@ namespace PL.Controllers
             {
                 studentGroup.Add(studentVM, groupsList.FirstOrDefault(g => g.Id == studentVM.IdGroup));
             }
-
 
             if (studentGroup.Count() == 0) ViewBag.message = "Пошук не дав результатів";
             return View(studentGroup);
