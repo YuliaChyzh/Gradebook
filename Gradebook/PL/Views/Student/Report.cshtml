@@ -1,8 +1,10 @@
 ﻿@{
     ViewBag.Title = "Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>@ViewBag.message</h2>
+
 
 <p>@Html.ActionLink("До списку студентів", "ShowStudent", "Student")</p>
 <p>@Html.ActionLink("На головну", "Index", "Home")</p>

@@ -37,10 +37,6 @@ namespace PL.Controllers
             ViewBag.groups = groups;
             var subjects = subjectService.Get();
             ViewBag.subjects = subjects;
-            foreach (var student in studentService.Get())
-            {
-                student.StudentAvg=studentService.GetStudentAvg(student.Id);
-            }
 
             IEnumerable<StudentDTO> studentDtos = studentService.Get().OrderBy(s => s.Name);
 
@@ -57,19 +53,74 @@ namespace PL.Controllers
 
             if (!String.IsNullOrEmpty(searchStudentAvg.ToString()))
             {
+                foreach (var student in studentDtos)
+                {
+                    student.StudentAvg = studentService.GetStudentAvg(student.Id);
+                }
                 studentDtos = studentDtos.Where(s => s.StudentAvg==searchStudentAvg).OrderBy(s => s.Name);
             }
 
             if (!String.IsNullOrEmpty(searchProgress))
             {
-                if (searchProgress == "Успішні")
-                    {
-                        studentDtos = studentDtos.Where(s => s.StudentAvg > 60).OrderBy(s => s.Name);
-                    }
-                    else if (searchProgress == "Неуспішні")
+                foreach (var student in studentDtos)
                 {
+                    student.StudentAvg = studentService.GetStudentAvg(student.Id);
+                }
+
+                if (searchProgress == "Успішні")
+                {
+                    studentDtos = studentDtos.Where(s => s.StudentAvg > 60).OrderBy(s => s.Name);
+                }
+                else if (searchProgress == "Неуспішні")
+                    {
                         studentDtos = studentDtos.Where(s => s.StudentAvg < 60).OrderBy(s => s.Name);
                     }
+            }
+
+            if (!String.IsNullOrEmpty(searchSubject))
+            {
+
+                int subjectId = subjectService.Get().Where(s => s.Name == searchSubject).FirstOrDefault().Id;
+                IEnumerable<EducationDTO> educationDtos = educationService.Get().Where(s => s.IdSubject == subjectId);
+
+                List<int> idStudents = new List<int>();
+                foreach (var education in educationDtos)
+                {
+                    idStudents.Add(education.IdStudent);
+                }
+                List<StudentDTO> studDtos = new List<StudentDTO>();
+                foreach (var id in idStudents)
+                {
+                    studDtos.Add(studentService.GetStudent(id));
+                }
+                List<StudentDTO> stud = new List<StudentDTO>();
+
+                foreach (var student in studDtos)
+                {
+                    if (studentDtos.Contains(studentDtos.Where(s => s.Id == student.Id))) stud.Add(student);
+                }
+
+                studentDtos = stud;
+
+                /*
+
+                students = mapper.Map<List<StudentDTO>, List<StudentViewModel>>(studDtos);
+
+                foreach (var student in students)
+                {
+                    student.StudentAvg = studentService.GetStudentAvg(student.Id);
+                }
+                groupsList.Clear();
+                foreach (var item in studDtos)
+                {
+                    groupsList.Add(groupService.GetGroup(item.IdGroup));
+                }
+                Dictionary<StudentViewModel, GroupDTO> res= new Dictionary<StudentViewModel, GroupDTO>();
+                foreach (StudentViewModel studentVM in students)
+                {
+                    if (studentGroup.ContainsKey(studentVM)) res.Add(studentVM, groupsList.FirstOrDefault(g => g.Id == studentVM.IdGroup));
+                }
+                studentGroup = res;*/
             }
 
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentDTO, StudentViewModel>()).CreateMapper();
@@ -85,28 +136,7 @@ namespace PL.Controllers
                 studentGroup.Add(studentVM, groupsList.FirstOrDefault(g => g.Id == studentVM.IdGroup));
             }
 
-            if (!String.IsNullOrEmpty(searchSubject))
-            {
-                studentGroup.Clear();
-                    int subjectId = subjectService.Get().Where(s => s.Name == searchSubject).FirstOrDefault().Id;
-                    IEnumerable<EducationDTO> educationDtos = educationService.Get().Where(s => s.IdSubject == subjectId);
-                    List<int> idStudents = new List<int>();
-                    List<StudentDTO> studDtos = new List<StudentDTO>();
-                    foreach (var id in idStudents)
-                    {
-                        studDtos.Add(studentService.GetStudent(id));
-                    }
-                    students = mapper.Map<List<StudentDTO>, List<StudentViewModel>>(studDtos);
-                    foreach (var item in studentDtos)
-                    {
-                        groupsList.Add(groupService.GetGroup(item.IdGroup));
-                    }
-                    foreach (StudentViewModel studentVM in students)
-                    {
-                        if (!studentGroup.ContainsKey(studentVM))
-                        studentGroup.Add(studentVM, groupsList.FirstOrDefault(g => g.Id == studentVM.IdGroup));
-                    }
-            }
+
             if (studentGroup.Count() == 0) ViewBag.message = "Пошук не дав результатів";
             return View(studentGroup);
         }
@@ -155,6 +185,12 @@ namespace PL.Controllers
                 if (!(validate.ValidationStudentName(studentVM.Name)))
                 {
                     ViewBag.message = "Введіть ім'я студента ще раз";
+                    return View("Report");
+                }
+
+                if(studentVM.IdGroup==0)
+                {
+                    ViewBag.message = "Введіть групу ім'я студента";
                     return View("Report");
                 }
                 StudentDTO studentDTO = studentService.GetStudent(studentVM.Id);

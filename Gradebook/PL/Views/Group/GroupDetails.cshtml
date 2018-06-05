@@ -3,14 +3,12 @@
     ViewBag.Title = "GroupDetails";
 }
 
-<h2>GroupDetails</h2>
-
 <h3>Список групи @ViewBag.groupName:</h3>
 
 <table class="table">
     <tr>
-        <td><p>Ім'я студента</p></td>
-        <td><p>Середній бал</p></td>
+        <th><p>Ім'я студента</p></th>
+        <th><p>Середній бал</p></th>
     </tr>
     @foreach (var item in Model)
     {

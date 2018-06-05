@@ -2,9 +2,8 @@
 
 @{
     ViewBag.Title = "StudentDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>StudentReport</h2>
 
 <h3>Ім'я студента: @ViewBag.studentName</h3>
 <h3>Група: @ViewBag.studentGroup</h3>
@@ -13,11 +12,10 @@
 @Html.ActionLink("Додати новий предмет студенту", "AddSubject", "Student", new { idStudent = ViewBag.studentId }, null)
 <table class="table">
     <tr>
-        <td><p>Предмет</p></td>
-        <td><p>Оцінка</p></td>
-        <td></td>
-        <td></td>
-    </tr>
+        <th><p>Предмет</p></th>
+        <th><p>Оцінка</p></th>
+        <th></th>
+</tr>
     @foreach (var item in Model)
     {
         <tr>
@@ -28,9 +26,7 @@
                 <p>@item.SubjectResult</p>
             </td>
             <td>
-                @Html.ActionLink("Видалити запис", "DeleteEducation", "Student", new { idEducation = @item.Id }, null)
-            </td>
-            <td>
+                @Html.ActionLink("Видалити запис", "DeleteEducation", "Student", new { idEducation = @item.Id }, null) |
                 @Html.ActionLink("Редагувати запис", "EditEducation", "Student", new { idEducation = @item.Id }, null)
             </td>
         </tr>

@@ -2,18 +2,16 @@
 
 @{
     ViewBag.Title = "ShowSubject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ShowSubject</h2>
 <p>@Html.ActionLink("Додати новий предмет", "CreateSubject", "Subject")</p>
 
 <table class="table">
     <tr>
-        <td><p>Назва предмету</p></td>
-        <td><p>Середній бал по предмету</p></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <th><p>Назва предмету</p></th>
+        <th><p>Середній бал по предмету</p></th>
+        <th></th>
     </tr>
 
     @foreach (var item in Model)
@@ -27,12 +25,8 @@
                 <p>@item.SubjectAvg</p>
             </td>
             <td>
-                <p>@Html.ActionLink("Деталі", "SubjectDetails", "Subject", new { idSubject = item.Id }, null)</p>
-            </td>
-            <td>
-                @Html.ActionLink("Видалити предмет", "DeleteSubject", "Subject", new { idSubject = item.Id }, null)
-            </td>
-            <td>
+                @Html.ActionLink("Деталі", "SubjectDetails", "Subject", new { idSubject = item.Id }, null) |
+                @Html.ActionLink("Видалити предмет", "DeleteSubject", "Subject", new { idSubject = item.Id }, null) |
                 @Html.ActionLink("Редагувати", "EditSubject", "Subject", new { idSubject = item.Id }, null)
             </td>
         </tr>

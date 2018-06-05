@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BLL.DTO.EducationDTO" Collapsed="true">
+    <Position X="1.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACABAAAAAAAAAAAAAAAAAAgIAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>DTO\EducationDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.DTO.GroupDTO" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DTO\GroupDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.DTO.StudentDTO" Collapsed="true">
+    <Position X="3.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAEAAAAAAAAAQAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>DTO\StudentDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.DTO.SubjectDTO" Collapsed="true">
+    <Position X="6.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>DTO\SubjectDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Infrastructure.ServiceModule" Collapsed="true">
+    <Position X="4.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Infrastructure\ServiceModule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Infrastructure.ValidationException" Collapsed="true">
+    <Position X="2.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Infrastructure\ValidationException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BLL.Services.EducationService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="1.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BIAAoAAAAOAAAABgAAAQIAFAAQAAAAAAAgAAAAAAAIA=</HashCode>
+      <FileName>Services\EducationService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BLL.Services.GroupService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAGAAAABAAAAAAAAAAAAgAAAEAAAAAAAAABA=</HashCode>
+      <FileName>Services\GroupService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BLL.Services.StudentService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="3.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAGAAAABAAAAAAAAAAACABAAEAQJAAABAAAA=</HashCode>
+      <FileName>Services\StudentService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BLL.Services.SubjectService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAgAAAAGAAAABAAAAAIACAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Services\SubjectService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="System.Object" Collapsed="true">
+    <Position X="9" Y="1.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Exception" Collapsed="true">
+    <Position X="2.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ninject.Modules.NinjectModule" Collapsed="true">
+    <Position X="4.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ninject.Syntax.BindingRoot" Collapsed="true">
+    <Position X="6.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="BLL.Interfaces.IEducationService" Collapsed="true">
+    <Position X="9" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BIAAoAAAAKAAAABgAAAQIAFAAQAAAAAAAgAAAAAAAIA=</HashCode>
+      <FileName>Interfaces\IEducationService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="BLL.Interfaces.IGroupService" Collapsed="true">
+    <Position X="9" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAACAAAABAAAAAAAAAAAAgAAAEAAAAAAAAABA=</HashCode>
+      <FileName>Interfaces\IGroupService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="BLL.Interfaces.IStudentService" Collapsed="true">
+    <Position X="9" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAABAAAAAAAAAAACABAAAAQJAAABAAAA=</HashCode>
+      <FileName>Interfaces\IStudentService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="BLL.Interfaces.ISubjectService" Collapsed="true">
+    <Position X="9" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAgAAAACAAAABAAAAAIACAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Interfaces\ISubjectService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

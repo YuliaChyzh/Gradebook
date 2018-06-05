@@ -3,9 +3,9 @@
 
 @{
     ViewBag.Title = "ShowStudent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ShowStudent</h2>
 @Html.ActionLink("Додати нового студента", "CreateStudent", "Student")
 
 <form asp-controller="Student" asp-action="ShowStudent" method="get">
@@ -42,12 +42,9 @@
 
 <table class="table">
     <tr>
-        <td><p>Ім'я студента</p></td>
-        <td><p>Група</p></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <th><p>Ім'я студента</p></th>
+        <th><p>Група</p></th>
+        <th></th>
     </tr>
 
     @foreach (var item in Model)
@@ -60,15 +57,9 @@
                 <p>@item.Value.Name</p>
             </td>
             <td>
-                @Html.ActionLink("Деталі", "StudentDetails", "Student", new { idStudent = item.Key.Id }, null)
-            </td>
-            <td>
-                @Html.ActionLink("Видалити студента", "DeleteStudent", "Student", new { idStudent = item.Key.Id }, null)
-            </td>
-            <td>
-                @Html.ActionLink("Редагувати", "EditStudent", "Student", new { idStudent = item.Key.Id }, null)
-            </td>
-            <td>
+                @Html.ActionLink("Деталі", "StudentDetails", "Student", new { idStudent = item.Key.Id }, null) |
+                @Html.ActionLink("Видалити студента", "DeleteStudent", "Student", new { idStudent = item.Key.Id }, null) |
+                @Html.ActionLink("Редагувати", "EditStudent", "Student", new { idStudent = item.Key.Id }, null) |
                 @Html.ActionLink("Додати новий предмет студенту", "AddSubject", "Student", new { idStudent = item.Key.Id }, null)
             </td>
 

@@ -73,7 +73,8 @@ namespace BLL.Services
                 student.StudentAvg = education.Average(num => Convert.ToInt64(num.SubjectResult));
 
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Student, StudentDTO>()).CreateMapper();
-            return mapper.Map<Student, StudentDTO>(student).StudentAvg;
+            StudentDTO studentDTO = mapper.Map<Student, StudentDTO>(student);
+            return studentDTO.StudentAvg;
         }
 
         public IEnumerable<StudentDTO> GetGroupList(int idGroup)
