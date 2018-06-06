@@ -55,7 +55,7 @@ namespace DAL.Repositories
         }
         public void Remove(Student item)
         {
-            studentSet.Remove(item);
+            studentSet.Remove(studentSet.Where(s => s.Id == item.Id).FirstOrDefault());
             context.SaveChanges();
         }
     }

@@ -72,11 +72,12 @@ namespace BLL.Services
             return mapper.Map<Group, GroupDTO>(group);
         }
 
-        public void SetGroupName(int idEducation)
+        public string SetGroupName(int idStudent)
         {
-            Education education = Database.EducationsRepository.FindById(idEducation);
+            Education education = Database.EducationsRepository.Get().Where(e => e.IdStudent == idStudent).FirstOrDefault();
             GroupDTO groupDTO = GetStudentGroup(education.IdStudent);
             education.GroupName = groupDTO.Name;
+            return groupDTO.Name;
         }
 
         public SubjectDTO GetStudentSubject(int idEducation)

@@ -10,7 +10,7 @@ namespace DAL.EF
         public EducationContext()
             : base("name=EducationContext")
         {
-            Database.SetInitializer<EducationContext>(new DataInitializer());
+            //Database.SetInitializer<EducationContext>(new DataInitializer());
         }
 
         public DbSet<Student> Students { get; set; }
@@ -19,7 +19,7 @@ namespace DAL.EF
         public DbSet<Education> Educations { get; set; }
     }
 
-    class DataInitializer : DropCreateDatabaseAlways<EducationContext>
+    /*class DataInitializer : DropCreateDatabaseAlways<EducationContext>
     {
         protected override void Seed(EducationContext context)
         {
@@ -69,5 +69,5 @@ namespace DAL.EF
             }
         }
 
-    }
+    }*/
 }

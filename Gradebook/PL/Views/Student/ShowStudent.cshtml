@@ -6,9 +6,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@Html.ActionLink("Додати нового студента", "CreateStudent", "Student")
+<p>
+    @Html.ActionLink("Додати нового студента", "CreateStudent", "Student")
+</p>
 
-<form asp-controller="Student" asp-action="ShowStudent" method="get">
+<form asp-controller="Student" asp-action="ShowStudent" method="get" style="display: flex; justify-content:center; border: 1px solid #CAD0D3; border-radius: 5px; padding-top: 10px; align-items:center; margin-bottom: 10px;">
     <p>
         Ім'я: <input type="text" name="searchName">
 
@@ -20,8 +22,14 @@
             }
         </select>
 
-        Середній бал: <input name="searchStudentAvg" asp-for="searchStudentAvg" type="number" max="100" min="1" />
-
+        Середній бал: <select id="studentsAvg" name="searchStudentAvg" asp-for="searchStudentAvg" asp-items="@ViewBag.students">
+                        <option>Всі</option>
+                        @foreach (var item in ViewBag.students)
+                        {
+                            <option>@item.StudentAvg.ToString("0.00")</option>
+                        }
+                      </select> 
+        
         Успішність: <select id="groups" name="searchProgress" asp-for="searchProgress">
             <option>Всі</option>
             <option>Успішні</option>
@@ -52,29 +60,32 @@
 
     @foreach (var item in Model)
     {
-    <tr>
-        <td>
-            <p>@item.Key.Name</p>
-        </td>
-        <td>
-            <p>@item.Value.Name</p>
-        </td>
-        <td>
-            @Html.ActionLink("Деталі", "StudentDetails", "Student", new { idStudent = item.Key.Id }, null)
-        </td>
-        <td>
-            @Html.ActionLink("Видалити студента", "DeleteStudent", "Student", new { idStudent = item.Key.Id }, null)
-        </td>
-        <td>
-            @Html.ActionLink("Редагувати", "EditStudent", "Student", new { idStudent = item.Key.Id }, null)
-        </td>
-        <td>
-            @Html.ActionLink("Додати новий предмет студенту", "AddSubject", "Student", new { idStudent = item.Key.Id }, null)
-        </td>
-    </tr>
+        <tr>
+            <td>
+                <p>@item.Key.Name</p>
+            </td>
+            <td>
+                <p>@item.Value.Name</p>
+            </td>
+            <td>
+                @Html.ActionLink("Деталі", "StudentDetails", "Student", new { idStudent = item.Key.Id }, null)
+            </td>
+            <td>
+                @Html.ActionLink("Видалити студента", "DeleteStudent", "Student", new { idStudent = item.Key.Id }, null)
+            </td>
+            <td>
+                @Html.ActionLink("Редагувати", "EditStudent", "Student", new { idStudent = item.Key.Id }, null)
+            </td>
+            <td>
+                @Html.ActionLink("Додати новий предмет студенту", "AddSubject", "Student", new { idStudent = item.Key.Id }, null)
+            </td>
+        </tr>
     }
 </table>
-<a>@ViewBag.message</a>
 
-<p>@Html.ActionLink("На головну", "Index", "Home")</p>
+<p align="center">@ViewBag.message</p>
+
+<p> @Html.ActionLink("На головну", "Index", "Home")</p>
+<p>@Html.ActionLink("До списку студентів", "ShowStudent", "Student")</p>
+
 

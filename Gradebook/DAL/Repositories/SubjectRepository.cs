@@ -53,7 +53,7 @@ namespace DAL.Repositories
         }
         public void Remove(Subject item)
         {
-            subjectSet.Remove(item);
+            subjectSet.Remove(subjectSet.Where(s=>s.Id==item.Id).FirstOrDefault());
             context.SaveChanges();
         }
     }

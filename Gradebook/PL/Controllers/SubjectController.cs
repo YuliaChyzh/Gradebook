@@ -26,16 +26,28 @@ namespace PL.Controllers
         }
 
         // Subject/ShowSubject
-        public ActionResult ShowSubject()
+        [HttpGet]
+        public ActionResult ShowSubject(string searchName, string searchSubjectAvg, string searchProgress)
         {
+            ViewBag.subjects = subjectService.Get().OrderBy(s => s.SubjectAvg);
+
             IEnumerable<SubjectDTO> subjectDtos = subjectService.Get().OrderBy(s=>s.Name);
-            List<SubjectDTO> subjectList = new List<SubjectDTO>();
-            foreach (var item in subjectDtos)
+
+            if (!String.IsNullOrEmpty(searchName))
             {
-                subjectList.Add(subjectService.GetSubjectAvg(item.Id));
+                subjectDtos = subjectService.SearchByName(subjectDtos, searchName);
             }
+            if (!String.IsNullOrEmpty(searchSubjectAvg) && (searchSubjectAvg != "Всі"))
+            {
+                subjectDtos = subjectService.SearchBySubjectAvg(subjectDtos, searchSubjectAvg);
+            }
+            if (!String.IsNullOrEmpty(searchProgress))
+            {
+                subjectDtos = subjectService.SearchByProgress(subjectDtos, searchProgress);
+            }
+
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<SubjectDTO, SubjectViewModel>()).CreateMapper();
-            var students = mapper.Map<List<SubjectDTO>, List<SubjectViewModel>>(subjectList);
+            var students = mapper.Map<IEnumerable<SubjectDTO>, IEnumerable<SubjectViewModel>>(subjectDtos);
 
             return View(students);
         }
@@ -44,12 +56,11 @@ namespace PL.Controllers
         public ActionResult SubjectDetails(int idSubject)
         {
             SubjectDTO subjectDTO = subjectService.GetSubject(idSubject);
-            subjectDTO = subjectService.GetSubjectAvg(idSubject);
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<SubjectDTO, SubjectViewModel>()).CreateMapper();
             var subjectVM = mapper.Map<SubjectDTO, SubjectViewModel>(subjectDTO);
 
             ViewBag.subjectName = subjectVM.Name;
-            ViewBag.subjectAvg = subjectVM.SubjectAvg;
+            ViewBag.subjectAvg = subjectService.GetSubjectAvg(idSubject).ToString("0.00");
 
             Dictionary<string, int> subjectResult = educationService.GetSubjectDetail(idSubject);
             return View(subjectResult);
@@ -108,15 +119,15 @@ namespace PL.Controllers
                 return View("Report");
             }
 
-            SubjectDTO subjectDTO = subjectService.GetSubject(editSubjectVM.Id);
+            SubjectDTO subjectDTO1 = subjectService.Get().Where(s => s.Name == editSubjectVM.Name).FirstOrDefault();
 
-            if (subjectService.Get().ToList().Contains(subjectService.Get().Where(s => s.Name == editSubjectVM.Name).FirstOrDefault()))
+            if (subjectDTO1 != null)
             {
                 ViewBag.message = "Предмет з такою назвою вже існує";
                 return View("Report");
             }
             IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<EditSubjectViewModel, SubjectDTO>()).CreateMapper();
-            subjectDTO = mapper.Map<EditSubjectViewModel, SubjectDTO>(editSubjectVM);
+            SubjectDTO subjectDTO = mapper.Map<EditSubjectViewModel, SubjectDTO>(editSubjectVM);
 
             subjectService.EditSubject(subjectDTO);
             ViewBag.message = "Предмет оновлено";
@@ -141,16 +152,16 @@ namespace PL.Controllers
                     return View("Report");
                 }
 
-                SubjectDTO subjectDTO = subjectService.GetSubject(subjectVM.Id);
+                SubjectDTO subjectDTO1 = subjectService.Get().Where(s => s.Name == subjectVM.Name).FirstOrDefault();
 
-                if (subjectService.Get().ToList().Contains(subjectService.Get().Where(s => s.Name == subjectVM.Name).FirstOrDefault()))
+                if(subjectDTO1!=null)
                 {
                     ViewBag.message = "Предмет з такою назвою вже існує";
                     return View("Report");
                 }
 
                 var mapper = new MapperConfiguration(cfg => cfg.CreateMap<SubjectViewModel, SubjectDTO>()).CreateMapper();
-                subjectDTO = mapper.Map<SubjectViewModel, SubjectDTO>(subjectVM);
+                SubjectDTO subjectDTO = mapper.Map<SubjectViewModel, SubjectDTO>(subjectVM);
                 subjectService.AddSubject(subjectDTO);
 
                 ViewBag.message = "Предмет додано";

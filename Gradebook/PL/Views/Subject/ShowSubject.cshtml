@@ -7,6 +7,28 @@
 
 <p>@Html.ActionLink("Додати новий предмет", "CreateSubject", "Subject")</p>
 
+<form asp-controller="Student" asp-action="ShowStudent" method="get" style="display: flex; justify-content:center; border: 1px solid #CAD0D3; border-radius: 5px; padding-top: 10px; align-items:center; margin-bottom: 10px;">
+    <p>
+        Назва: <input type="text" name="searchName">
+
+        Середній бал: <select id="subjectsAvg" name="searchSubjectAvg" asp-for="searchSubjectAvg" asp-items="@ViewBag.students">
+            <option>Всі</option>
+            @foreach (var item in ViewBag.subjects)
+            {
+                <option>@item.SubjectAvg.ToString("0.00")</option>
+            }
+        </select>
+
+        Успішність студентів з предмету: <select id="progress" name="searchProgress" asp-for="searchProgress">
+            <option>Всі</option>
+            <option>Успішні</option>
+            <option>Неуспішні</option>
+        </select>
+
+        <input type="submit" value="Пошук" />
+    </p>
+</form>
+
 <table class="table">
     <tr>
         <th><p>Назва предмету</p></th>
@@ -18,25 +40,26 @@
 
     @foreach (var item in Model)
     {
-    <tr>
+        <tr>
 
-        <td>
-            <p>@item.Name</p>
-        </td>
-        <td>
-            <p>@item.SubjectAvg</p>
-        </td>
-        <td>
-            @Html.ActionLink("Деталі", "SubjectDetails", "Subject", new { idSubject = item.Id }, null)
-        </td>
-        <td>
-            @Html.ActionLink("Видалити предмет", "DeleteSubject", "Subject", new { idSubject = item.Id }, null)
-        </td>
-        <td>
-            @Html.ActionLink("Редагувати", "EditSubject", "Subject", new { idSubject = item.Id }, null)
-        </td>
-    </tr>
+            <td>
+                <p>@item.Name</p>
+            </td>
+            <td>
+                <p>@item.SubjectAvg.ToString("0.00")</p>
+            </td>
+            <td>
+                @Html.ActionLink("Деталі", "SubjectDetails", "Subject", new { idSubject = item.Id }, null)
+            </td>
+            <td>
+                @Html.ActionLink("Видалити предмет", "DeleteSubject", "Subject", new { idSubject = item.Id }, null)
+            </td>
+            <td>
+                @Html.ActionLink("Редагувати", "EditSubject", "Subject", new { idSubject = item.Id }, null)
+            </td>
+        </tr>
     }
 </table>
 
+<p>@Html.ActionLink("До списку предметів", "ShowSubject", "Subject")</p>
 <p>@Html.ActionLink("На головну", "Index", "Home")</p>

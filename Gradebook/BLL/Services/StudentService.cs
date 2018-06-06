@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using BLL.DTO;
 using DAL.Entities;
-//using BLL.BusinessModels;
 using DAL.Interfaces;
 using BLL.Infrastructure;
 using BLL.Interfaces;
@@ -71,9 +70,10 @@ namespace BLL.Services
             IEnumerable<Education> education = Database.EducationsRepository.Get().Where(o => o.IdStudent == idStudent);
             if (education.Count() != 0)
                 student.StudentAvg = education.Average(num => Convert.ToInt64(num.SubjectResult));
-
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Student, StudentDTO>()).CreateMapper();
             StudentDTO studentDTO = mapper.Map<Student, StudentDTO>(student);
+            EditStudent(studentDTO);
+
             return studentDTO.StudentAvg;
         }
 
@@ -96,22 +96,16 @@ namespace BLL.Services
             return studentDtos;
         }
 
-        public IEnumerable<StudentDTO> SearchByStudentAvg(IEnumerable<StudentDTO> studentDtos, int searchStudentAvg)
+        public IEnumerable<StudentDTO> SearchByStudentAvg(IEnumerable<StudentDTO> studentDtos, string searchStudentAvg)
         {
-            foreach (var student in studentDtos)
-            {
-                student.StudentAvg = GetStudentAvg(student.Id);
-            }
-            studentDtos = studentDtos.Where(s => s.StudentAvg == searchStudentAvg).OrderBy(s => s.Name);
+
+            studentDtos = studentDtos.Where(s => s.StudentAvg.ToString("0.00") == searchStudentAvg).OrderBy(s => s.Name);
             return studentDtos;
         }
 
         public IEnumerable<StudentDTO> SearchByProgress(IEnumerable<StudentDTO> studentDtos, string searchProgress)
         {
-            foreach (var student in studentDtos)
-            {
-                student.StudentAvg = GetStudentAvg(student.Id);
-            }
+
             if (searchProgress == "Успішні")
             {
                 studentDtos = studentDtos.Where(s => s.StudentAvg > 60).OrderBy(s => s.Name);

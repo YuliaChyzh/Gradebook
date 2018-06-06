@@ -14,7 +14,10 @@ namespace BLL.Interfaces
         void DeleteSubject(int id);
         void AddSubject(SubjectDTO subjectDTO);
         void EditSubject(SubjectDTO subjectDTO);
-        SubjectDTO GetSubjectAvg(int id);
+        double GetSubjectAvg(int id);
+        IEnumerable<SubjectDTO> SearchByName(IEnumerable<SubjectDTO> subjectDtos, string searchName);
+        IEnumerable<SubjectDTO> SearchBySubjectAvg(IEnumerable<SubjectDTO> subjectDtos, string searchSubjectAvg);
+        IEnumerable<SubjectDTO> SearchByProgress(IEnumerable<SubjectDTO> subjectDtos, string searchProgress);
         void Dispose();
     }
 }

@@ -5,7 +5,7 @@
 }
 
 <div class="card m-5">
-    <h5 class="card-header text-center">Додати нового студента</h5>
+    <h3 class="card-header text-center">Додати нового студента</h3>
     <div class="card-body">
         <form class="p-a-1" action="/Student/CreateStudent" method="post">
             <div class="form-group">
@@ -15,6 +15,7 @@
             <div class="form-group">
                 <label for="GroupName"> Група: </label>
                 <select id="groups" name="GroupName">
+                    <option></option>
                     @foreach (var item in ViewBag.groups)
                     {
                         <option>@item.Name</option>

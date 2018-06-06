@@ -18,7 +18,7 @@ namespace BLL.Interfaces
         void EditStudent(StudentDTO studentDTO);
         IEnumerable<StudentDTO> SearchByName(IEnumerable<StudentDTO> studentDtos, string searchName);
         IEnumerable<StudentDTO> SearchByGroup(IEnumerable<StudentDTO> studentDtos, int idGroup);
-        IEnumerable<StudentDTO> SearchByStudentAvg(IEnumerable<StudentDTO> studentDtos, int searchStudentAvg);
+        IEnumerable<StudentDTO> SearchByStudentAvg(IEnumerable<StudentDTO> studentDtos, string searchStudentAvg);
         IEnumerable<StudentDTO> SearchByProgress(IEnumerable<StudentDTO> studentDtos, string searchProgress);
         IEnumerable<StudentDTO> SearchBySubject(IEnumerable<StudentDTO> studentDtos, IEnumerable<EducationDTO> educationDtos);
         void Dispose();

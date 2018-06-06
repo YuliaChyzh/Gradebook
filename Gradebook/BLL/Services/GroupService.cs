@@ -30,7 +30,6 @@ namespace BLL.Services
         public GroupDTO GetGroup(int id)
         {
             var group = Database.GroupsRepository.FindById(id);
-            //group.Id = id;
             if (group == null) return null;
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Group, GroupDTO>()).CreateMapper();
             return mapper.Map<Group, GroupDTO>(group);

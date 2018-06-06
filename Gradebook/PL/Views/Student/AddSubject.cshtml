@@ -5,14 +5,11 @@
 }
 
 <div class="card m-5">
-    <h5 class="card-header text-center">Додати новий предмет студенту</h5>
+    <h3 class="card-header text-center">Додати новий предмет студенту</h3>
     <div class="card-body">
         <form class="p-a-1" action="/Student/AddSubject" method="post">
             <div class="form-group">
-                <div class="form-group">
-                    <label for="IdStudent"> Студент (Id): </label>
-                    <input class="form-control" name="IdStudent" value="@Model.IdStudent" readonly />
-                </div>
+                <input class="form-control" type="hidden" name="IdStudent" value="@Model.IdStudent" readonly />
                 <label for="SubjectName"> Предмет: </label>
                 <select id="subjects" name="SubjectName">
                     @foreach (var item in ViewBag.subjects)
@@ -23,7 +20,7 @@
             </div>
             <div class="form-group">
                 <label for="SubjectResult"> Оцінка: </label>
-                <input class="form-control" name="SubjectResult" type="number" max="100" min="1" value="@Model.SubjectResult" />
+                <input class="form-control" style="width:150px" name="SubjectResult" type="number" size="3" max="100" min="1" value="@Model.SubjectResult" />
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Підтвердити</button>

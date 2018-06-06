@@ -31,12 +31,11 @@ namespace PL.Controllers
 
         // Student/ShowStudent
         [HttpGet]
-        public ActionResult ShowStudent(string searchName, string searchGroup, int? searchStudentAvg, string searchProgress, string searchSubject )
+        public ActionResult ShowStudent(string searchName, string searchGroup, string searchStudentAvg, string searchProgress, string searchSubject )
         {
-            var groups = groupService.Get();
-            ViewBag.groups = groups;
-            var subjects = subjectService.Get();
-            ViewBag.subjects = subjects;
+            ViewBag.groups = groupService.Get();
+            ViewBag.subjects = subjectService.Get();
+            ViewBag.students = studentService.Get().OrderBy(s=>s.StudentAvg);
 
             IEnumerable<StudentDTO> studentDtos = studentService.Get().OrderBy(s => s.Name);
 
@@ -49,9 +48,9 @@ namespace PL.Controllers
                 int groupId = groupService.Get().Where(g => g.Name == searchGroup).FirstOrDefault().Id;
                 studentDtos = studentService.SearchByGroup(studentDtos, groupId);
             }
-            if (!String.IsNullOrEmpty(searchStudentAvg.ToString()))
+            if (!String.IsNullOrEmpty(searchStudentAvg) && (searchStudentAvg!="Всі"))
             {
-                studentDtos = studentService.SearchByStudentAvg(studentDtos, (int)searchStudentAvg);
+                studentDtos = studentService.SearchByStudentAvg(studentDtos, searchStudentAvg);
             }
             if (!String.IsNullOrEmpty(searchProgress))
             {
@@ -92,7 +91,7 @@ namespace PL.Controllers
 
             ViewBag.studentName = studentVM.Name;
             ViewBag.studentGroup = educationService.GetStudentGroup(idStudent).Name;
-            ViewBag.studentAvg = studentVM.StudentAvg;
+            ViewBag.studentAvg = studentVM.StudentAvg.ToString("0.00");
             ViewBag.studentId = studentVM.Id;
 
             IEnumerable<EducationDTO> eduDTOs = educationService.Get().Where(e => e.IdStudent == idStudent);
@@ -130,14 +129,14 @@ namespace PL.Controllers
                     return View("Report");
                 }
 
-                if(studentVM.IdGroup==0)
+                if(studentVM.GroupName=="")
                 {
-                    ViewBag.message = "Введіть групу ім'я студента";
+                    ViewBag.message = "Введіть групу студента";
                     return View("Report");
                 }
-                StudentDTO studentDTO = studentService.GetStudent(studentVM.Id);
+                StudentDTO studentDTO1 = studentService.Get().Where(s => s.Name == studentVM.Name).FirstOrDefault();
 
-                if (studentService.Get().ToList().Contains(studentService.Get().Where(s => s.Name == studentVM.Name).FirstOrDefault()))
+                if (studentDTO1!=null)
                 {
                     ViewBag.message = "Студент з таким ім'ям вже існує";
                     return View("Report");
@@ -145,10 +144,10 @@ namespace PL.Controllers
 
                 int groupId = groupService.Get().Where(g => g.Name == studentVM.GroupName).FirstOrDefault().Id;
                 var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentViewModel, StudentDTO>()).CreateMapper();
-                StudentDTO student = mapper.Map<StudentViewModel, StudentDTO>(studentVM);
-                student.IdGroup = groupId;
+                StudentDTO studentDTO= mapper.Map<StudentViewModel, StudentDTO>(studentVM);
+                studentDTO.IdGroup = groupId;
+                studentService.AddStudent(studentDTO);
 
-                studentService.AddStudent(student);
                 ViewBag.message = "Студента успішно створено";
                 return View("Report");
             }
@@ -175,7 +174,7 @@ namespace PL.Controllers
 
             if (eduList.Count() != 0)
             {
-                ViewBag.message = "Студент ще має предмети вивчення";
+                ViewBag.message = "Помилка видалення: студент ще має записи про предмети вивчення";
                 return View("Report");
             }
 
@@ -192,10 +191,13 @@ namespace PL.Controllers
             {
                 Id = studentDTO.Id,
                 Name = studentDTO.Name,
+                IdGroup=studentDTO.IdGroup,
+                GroupName=educationService.SetGroupName(studentDTO.Id),
                 StudentAvg = studentDTO.StudentAvg
             };
 
-            educationService.SetGroupName(editStudentVM.Id);
+
+            //educationService.SetGroupName(editStudentVM.Id);
             var groups = groupService.Get();
             ViewBag.groups = groups;
 
@@ -220,16 +222,16 @@ namespace PL.Controllers
                 return View("Report");
             }
 
-            StudentDTO studentDTO = studentService.GetStudent(editStudentVM.Id);
+            StudentDTO studentDTO1 = studentService.Get().Where(s => s.Name == editStudentVM.Name).FirstOrDefault();
 
-            if (studentService.Get().ToList().Contains(studentService.Get().Where(s => s.Name == editStudentVM.Name).FirstOrDefault()))
+            if (studentDTO1 != null)
             {
                 ViewBag.message = "Студент з таким ім'ям вже існує";
                 return View("Report");
             }
 
             IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<EditStudentViewModel, StudentDTO>()).CreateMapper();
-            studentDTO = mapper.Map<EditStudentViewModel, StudentDTO>(editStudentVM);
+            StudentDTO studentDTO = mapper.Map<EditStudentViewModel, StudentDTO>(editStudentVM);
 
             studentService.EditStudent(studentDTO);
             ViewBag.message = "Дані студента оновлено";
@@ -259,10 +261,11 @@ namespace PL.Controllers
                     return View("Report");
                 }
 
-                int subjectId = subjectService.Get().Where(s => s.Name == educationVM.SubjectName).FirstOrDefault().Id;
-                educationVM.IdSubject = subjectId;
+                int idSubject= subjectService.Get().Where(s => s.Name == educationVM.SubjectName).FirstOrDefault().Id;
+                educationVM.IdSubject = idSubject;                
+                EducationDTO educationDTO1 = educationService.Get().Where(s => s.IdStudent == educationVM.IdStudent).Where(s => s.IdSubject == educationVM.IdSubject).FirstOrDefault();
 
-                if (educationService.Get().ToList().Contains(educationService.Get().Where(s => s.IdStudent == educationVM.IdStudent).Where(s => s.IdSubject == educationVM.IdSubject).FirstOrDefault()))
+                if (educationDTO1!=null)
                 {
                     ViewBag.message = "Студент вже має такий предмет";
                     return View("Report");
@@ -272,6 +275,11 @@ namespace PL.Controllers
                 EducationDTO educationDTO = mapper.Map<EducationViewModel, EducationDTO>(educationVM);
 
                 educationService.AddSubject(educationDTO);
+                StudentDTO studentDTO = studentService.GetStudent(educationDTO.IdStudent);
+                studentDTO.StudentAvg = studentService.GetStudentAvg(studentDTO.Id);
+                SubjectDTO subjectDTO = subjectService.GetSubject(educationDTO.IdSubject);
+                subjectDTO.SubjectAvg = subjectService.GetSubjectAvg(subjectDTO.Id);
+
                 ViewBag.message = "Предмет додано до даних студента";
                 return View("Report");
             }
@@ -281,7 +289,13 @@ namespace PL.Controllers
         // Student/DeleteEducation
         public ActionResult DeleteEducation(int idEducation)
         {
+            StudentDTO studentDTO = studentService.GetStudent(educationService.GetEducation(idEducation).IdStudent);
+            SubjectDTO subjectDTO = subjectService.GetSubject(educationService.GetEducation(idEducation).IdSubject);
+
             educationService.DeleteEducation(idEducation);
+            studentDTO.StudentAvg = studentService.GetStudentAvg(studentDTO.Id);
+            subjectDTO.SubjectAvg = subjectService.GetSubjectAvg(subjectDTO.Id);
+
             ViewBag.message = "Видалення успішне";
             return View("Report");
 
@@ -304,9 +318,15 @@ namespace PL.Controllers
             educationVM.IdSubject= subjectService.Get().Where(s => s.Name == educationVM.SubjectName).FirstOrDefault().Id;
             IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<EducationViewModel,EducationDTO>()).CreateMapper();
             EducationDTO educationDTO = mapper.Map<EducationViewModel, EducationDTO>(educationVM);
-
-
+            
             educationService.EditEducation(educationDTO);
+                        
+            StudentDTO studentDTO = studentService.GetStudent(educationDTO.IdStudent);
+            studentDTO.StudentAvg = studentService.GetStudentAvg(studentDTO.Id);
+
+            SubjectDTO subjectDTO = subjectService.GetSubject(educationDTO.IdSubject);
+            subjectDTO.SubjectAvg = subjectService.GetSubjectAvg(subjectDTO.Id);
+
             ViewBag.message = "Дані про предмет оновлено";
             return View("Report");
         }
