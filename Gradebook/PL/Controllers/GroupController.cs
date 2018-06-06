@@ -7,8 +7,6 @@ using BLL.Interfaces;
 using BLL.DTO;
 using PL.Models;
 using AutoMapper;
-using BLL.Infrastructure;
-using Newtonsoft.Json;
 using PL.Models.EditModels;
 using PL.Validation;
 
@@ -17,20 +15,17 @@ namespace PL.Controllers
     public class GroupController : Controller
     {
         IStudentService studentService;
-        ISubjectService subjectService;
         IGroupService groupService;
-        IEducationService educationService;
 
         public GroupController() { }
 
-        public GroupController(IStudentService studentService, ISubjectService subjectService, IGroupService groupService, IEducationService educationService)
+        public GroupController(IStudentService studentService,IGroupService groupService)
         {
             this.studentService = studentService;
-            this.subjectService = subjectService;
             this.groupService = groupService;
-            this.educationService = educationService;
         }
 
+        // Group/ShowGroups
         public ActionResult ShowGroups()
         {
             IEnumerable<GroupDTO> groupDtos = groupService.Get().OrderBy(g=>g.Name);
@@ -40,6 +35,7 @@ namespace PL.Controllers
             return View(groups);
         }
 
+        // Group/GroupDetails
         public ActionResult GroupDetails(int idGroup)
         {
             IEnumerable<StudentDTO> studentDtos = studentService.GetGroupList(idGroup);
@@ -57,6 +53,7 @@ namespace PL.Controllers
             return View(students);
         }
 
+        // Group/DeleteGroup
         public ActionResult DeleteGroup(int idGroup)
         {
             IEnumerable<StudentDTO> studentList = studentService.GetGroupList(idGroup);
@@ -69,7 +66,7 @@ namespace PL.Controllers
 
             if (studentList.Count() != 0)
             {
-                ViewBag.message = "Група ще має студентів";
+                ViewBag.message = "Помилка видалення: список студентів групи не пустий";
                 return View("Report");
             }
 
@@ -78,6 +75,7 @@ namespace PL.Controllers
             return View("Report");
         }
 
+        // Group/EditGroup
         public ActionResult EditGroup(int idGroup)
         {
             GroupDTO groupDTO = groupService.GetGroup(idGroup);
@@ -116,6 +114,7 @@ namespace PL.Controllers
             return View("ShowGroups", groups);
         }
 
+        // Group/CreateGroup
         [HttpGet]
         public ActionResult CreateGroup()
         {
@@ -150,6 +149,7 @@ namespace PL.Controllers
             return View();
         }
 
+        // Group/Report
         public ActionResult Report()
         {
             return View();

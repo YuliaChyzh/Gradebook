@@ -12,24 +12,30 @@
         <th><p>Назва предмету</p></th>
         <th><p>Середній бал по предмету</p></th>
         <th></th>
+        <th></th>
+        <th></th>
     </tr>
 
     @foreach (var item in Model)
     {
-        <tr>
+    <tr>
 
-            <td>
-                <p>@item.Name</p>
-            </td>
-            <td>
-                <p>@item.SubjectAvg</p>
-            </td>
-            <td>
-                @Html.ActionLink("Деталі", "SubjectDetails", "Subject", new { idSubject = item.Id }, null) |
-                @Html.ActionLink("Видалити предмет", "DeleteSubject", "Subject", new { idSubject = item.Id }, null) |
-                @Html.ActionLink("Редагувати", "EditSubject", "Subject", new { idSubject = item.Id }, null)
-            </td>
-        </tr>
+        <td>
+            <p>@item.Name</p>
+        </td>
+        <td>
+            <p>@item.SubjectAvg</p>
+        </td>
+        <td>
+            @Html.ActionLink("Деталі", "SubjectDetails", "Subject", new { idSubject = item.Id }, null)
+        </td>
+        <td>
+            @Html.ActionLink("Видалити предмет", "DeleteSubject", "Subject", new { idSubject = item.Id }, null)
+        </td>
+        <td>
+            @Html.ActionLink("Редагувати", "EditSubject", "Subject", new { idSubject = item.Id }, null)
+        </td>
+    </tr>
     }
 </table>
 

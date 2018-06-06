@@ -35,7 +35,7 @@
                 <option>@item.Name</option>
             }
         </select>
-        <input type="submit" value="Шукати" />
+        <input type="submit" value="Пошук" />
     </p>
 </form>
 
@@ -45,25 +45,33 @@
         <th><p>Ім'я студента</p></th>
         <th><p>Група</p></th>
         <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
     </tr>
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                <p>@item.Key.Name</p>
-            </td>
-            <td>
-                <p>@item.Value.Name</p>
-            </td>
-            <td>
-                @Html.ActionLink("Деталі", "StudentDetails", "Student", new { idStudent = item.Key.Id }, null) |
-                @Html.ActionLink("Видалити студента", "DeleteStudent", "Student", new { idStudent = item.Key.Id }, null) |
-                @Html.ActionLink("Редагувати", "EditStudent", "Student", new { idStudent = item.Key.Id }, null) |
-                @Html.ActionLink("Додати новий предмет студенту", "AddSubject", "Student", new { idStudent = item.Key.Id }, null)
-            </td>
-
-        </tr>
+    <tr>
+        <td>
+            <p>@item.Key.Name</p>
+        </td>
+        <td>
+            <p>@item.Value.Name</p>
+        </td>
+        <td>
+            @Html.ActionLink("Деталі", "StudentDetails", "Student", new { idStudent = item.Key.Id }, null)
+        </td>
+        <td>
+            @Html.ActionLink("Видалити студента", "DeleteStudent", "Student", new { idStudent = item.Key.Id }, null)
+        </td>
+        <td>
+            @Html.ActionLink("Редагувати", "EditStudent", "Student", new { idStudent = item.Key.Id }, null)
+        </td>
+        <td>
+            @Html.ActionLink("Додати новий предмет студенту", "AddSubject", "Student", new { idStudent = item.Key.Id }, null)
+        </td>
+    </tr>
     }
 </table>
 <a>@ViewBag.message</a>

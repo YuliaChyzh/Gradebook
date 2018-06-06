@@ -5,15 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ShowGroups</h2>
 <p>@Html.ActionLink("Додати нову групу", "CreateGroup", "Group")</p>
 
 <table class="table">
     <tr>
-        <td><p>Назва групи</p></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <th><p>Назва групи</p></th>
+        <th></th>
+        <th></th>
+        <th></th>
     </tr>
     @foreach (var item in Model)
     {

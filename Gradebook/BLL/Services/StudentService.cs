@@ -84,6 +84,65 @@ namespace BLL.Services
             return mapper.Map<IEnumerable<Student>, IEnumerable<StudentDTO>>(students);
         }
 
+        public IEnumerable<StudentDTO> SearchByName(IEnumerable<StudentDTO> studentDtos, string searchName)
+        {
+            studentDtos = studentDtos.Where(s => s.Name.ToUpper().Contains(searchName.ToUpper())).OrderBy(s => s.Name);
+            return studentDtos;
+        }
+
+        public IEnumerable<StudentDTO> SearchByGroup(IEnumerable<StudentDTO> studentDtos, int idGroup)
+        {
+            studentDtos = studentDtos.Where(s => s.IdGroup == idGroup).OrderBy(s => s.Name);
+            return studentDtos;
+        }
+
+        public IEnumerable<StudentDTO> SearchByStudentAvg(IEnumerable<StudentDTO> studentDtos, int searchStudentAvg)
+        {
+            foreach (var student in studentDtos)
+            {
+                student.StudentAvg = GetStudentAvg(student.Id);
+            }
+            studentDtos = studentDtos.Where(s => s.StudentAvg == searchStudentAvg).OrderBy(s => s.Name);
+            return studentDtos;
+        }
+
+        public IEnumerable<StudentDTO> SearchByProgress(IEnumerable<StudentDTO> studentDtos, string searchProgress)
+        {
+            foreach (var student in studentDtos)
+            {
+                student.StudentAvg = GetStudentAvg(student.Id);
+            }
+            if (searchProgress == "Успішні")
+            {
+                studentDtos = studentDtos.Where(s => s.StudentAvg > 60).OrderBy(s => s.Name);
+            }
+            else if (searchProgress == "Неуспішні")
+            {
+                studentDtos = studentDtos.Where(s => s.StudentAvg < 60).OrderBy(s => s.Name);
+            }
+            return studentDtos;
+        }
+
+        public IEnumerable<StudentDTO> SearchBySubject(IEnumerable<StudentDTO> studentDtos, IEnumerable<EducationDTO> educationDtos)
+        {
+            List<int> idStudents = new List<int>();
+            foreach (var education in educationDtos)
+            {
+                idStudents.Add(education.IdStudent);
+            }
+            List<StudentDTO> studDtos = new List<StudentDTO>();
+            foreach (var id in idStudents)
+            {
+                studDtos.Add(GetStudent(id));
+            }
+            List<StudentDTO> stud = new List<StudentDTO>();
+            foreach (var student in studDtos)
+            {
+                if (studentDtos.Contains(studentDtos.Where(s => s.Id == student.Id).FirstOrDefault())) stud.Add(student);
+            }
+            return stud;
+        }
+
         public void Dispose()
         {
             Database.Dispose();

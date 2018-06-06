@@ -9,13 +9,12 @@
     <div class="card-body">
         <form class="p-a-1" action="/Student/CreateStudent" method="post">
             <div class="form-group">
-                <label for="Name"> Name: </label>
+                <label for="Name"> Ім'я: </label>
                 <input class="form-control" name="Name" value="@Model.Name" />
             </div>
             <div class="form-group">
-                <label for="GroupName"> Group: </label>
+                <label for="GroupName"> Група: </label>
                 <select id="groups" name="GroupName">
-                    <option value="">Група</option>
                     @foreach (var item in ViewBag.groups)
                     {
                         <option>@item.Name</option>
@@ -23,7 +22,7 @@
                 </select>
             </div>
             <div class="text-center">
-                <button type="submit" class="btn btn-primary">Submit </button>
+                <button type="submit" class="btn btn-primary">Підтвердити</button>
             </div>
         </form>
     </div>

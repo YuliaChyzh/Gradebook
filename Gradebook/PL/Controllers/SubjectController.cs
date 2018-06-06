@@ -7,7 +7,6 @@ using BLL.Interfaces;
 using BLL.DTO;
 using PL.Models;
 using AutoMapper;
-using BLL.Infrastructure;
 using PL.Models.EditModels;
 using PL.Validation;
 
@@ -15,21 +14,18 @@ namespace PL.Controllers
 {
     public class SubjectController : Controller
     {
-        IStudentService studentService;
         ISubjectService subjectService;
-        IGroupService groupService;
         IEducationService educationService;
 
         public SubjectController() { }
 
-        public SubjectController(IStudentService studentService, ISubjectService subjectService, IGroupService groupService, IEducationService educationService)
+        public SubjectController(ISubjectService subjectService, IEducationService educationService)
         {
-            this.studentService = studentService;
             this.subjectService = subjectService;
-            this.groupService = groupService;
             this.educationService = educationService;
         }
 
+        // Subject/ShowSubject
         public ActionResult ShowSubject()
         {
             IEnumerable<SubjectDTO> subjectDtos = subjectService.Get().OrderBy(s=>s.Name);
@@ -44,6 +40,7 @@ namespace PL.Controllers
             return View(students);
         }
 
+        // Subject/SubjectDetails
         public ActionResult SubjectDetails(int idSubject)
         {
             SubjectDTO subjectDTO = subjectService.GetSubject(idSubject);
@@ -58,6 +55,7 @@ namespace PL.Controllers
             return View(subjectResult);
         }
 
+        // Subject/DeleteSubject
         public ActionResult DeleteSubject(int idSubject)
         {
             IEnumerable<EducationDTO> eduList = educationService.GetSubbjectList(idSubject);
@@ -77,7 +75,7 @@ namespace PL.Controllers
 
             if (eduList.Count() != 0)
             {
-                ViewBag.message = "Студенти ще мають цей предмет";
+                ViewBag.message = "Помилка видалення: студенти ще мають оцінки з даного предмету";
                 return View("Report");
             }
 
@@ -85,6 +83,8 @@ namespace PL.Controllers
             return View("Report");
         }
 
+        // Subject/EditSubject
+        [HttpGet]
         public ActionResult EditSubject(int idSubject)
         {
             SubjectDTO subjectDTO = subjectService.GetSubject(idSubject);
@@ -98,7 +98,6 @@ namespace PL.Controllers
 
             return View("EditSubject", editSubjectVM);
         }
-
         [HttpPost]
         public ActionResult EditSubject(EditSubjectViewModel editSubjectVM)
         {
@@ -124,6 +123,7 @@ namespace PL.Controllers
             return View("Report");
         }
 
+        // Subject/CreateSubject
         [HttpGet]
         public ActionResult CreateSubject()
         {
@@ -159,6 +159,7 @@ namespace PL.Controllers
             return View();
         }
 
+        // Subject/Report
         public ActionResult Report()
         {
             return View();

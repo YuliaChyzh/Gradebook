@@ -7,7 +7,6 @@ using BLL.Interfaces;
 using BLL.DTO;
 using PL.Models;
 using AutoMapper;
-using BLL.Infrastructure;
 using PL.Models.EditModels;
 using PL.Validation;
 
@@ -30,6 +29,7 @@ namespace PL.Controllers
             this.educationService = educationService;
         }
 
+        // Student/ShowStudent
         [HttpGet]
         public ActionResult ShowStudent(string searchName, string searchGroup, int? searchStudentAvg, string searchProgress, string searchSubject )
         {
@@ -42,65 +42,27 @@ namespace PL.Controllers
 
             if (!String.IsNullOrEmpty(searchName))
             {
-                studentDtos = studentDtos.Where(s=>s.Name.ToUpper().Contains(searchName.ToUpper())).OrderBy(s => s.Name);
+                studentDtos = studentService.SearchByName(studentDtos, searchName);
             }
-
             if (!String.IsNullOrEmpty(searchGroup))
             {
                 int groupId = groupService.Get().Where(g => g.Name == searchGroup).FirstOrDefault().Id;
-                studentDtos = studentDtos.Where(s => s.IdGroup == groupId).OrderBy(s => s.Name);
+                studentDtos = studentService.SearchByGroup(studentDtos, groupId);
             }
-
             if (!String.IsNullOrEmpty(searchStudentAvg.ToString()))
             {
-                foreach (var student in studentDtos)
-                {
-                    student.StudentAvg = studentService.GetStudentAvg(student.Id);
-                }
-                studentDtos = studentDtos.Where(s => s.StudentAvg==searchStudentAvg).OrderBy(s => s.Name);
+                studentDtos = studentService.SearchByStudentAvg(studentDtos, (int)searchStudentAvg);
             }
-
             if (!String.IsNullOrEmpty(searchProgress))
             {
-                foreach (var student in studentDtos)
-                {
-                    student.StudentAvg = studentService.GetStudentAvg(student.Id);
-                }
-
-                if (searchProgress == "Успішні")
-                {
-                    studentDtos = studentDtos.Where(s => s.StudentAvg > 60).OrderBy(s => s.Name);
-                }
-                else if (searchProgress == "Неуспішні")
-                    {
-                        studentDtos = studentDtos.Where(s => s.StudentAvg < 60).OrderBy(s => s.Name);
-                    }
+                studentDtos = studentService.SearchByProgress(studentDtos, searchProgress);
             }
-
             if (!String.IsNullOrEmpty(searchSubject))
             {
 
                 int subjectId = subjectService.Get().Where(s => s.Name == searchSubject).FirstOrDefault().Id;
                 IEnumerable<EducationDTO> educationDtos = educationService.Get().Where(s => s.IdSubject == subjectId);
-
-                List<int> idStudents = new List<int>();
-                foreach (var education in educationDtos)
-                {
-                    idStudents.Add(education.IdStudent);
-                }
-                List<StudentDTO> studDtos = new List<StudentDTO>();
-                foreach (var id in idStudents)
-                {
-                    studDtos.Add(studentService.GetStudent(id));
-                }
-                List<StudentDTO> stud = new List<StudentDTO>();
-
-                foreach (var student in studDtos)
-                {
-                    if (studentDtos.Contains(studentDtos.Where(s => s.Id == student.Id).FirstOrDefault())) stud.Add(student);
-                }
-
-                studentDtos = stud;
+                studentDtos = studentService.SearchBySubject(studentDtos, educationDtos);
             }
 
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<StudentDTO, StudentViewModel>()).CreateMapper();
@@ -120,6 +82,7 @@ namespace PL.Controllers
             return View(studentGroup);
         }
 
+        // Student/StudentDetails
         public ActionResult StudentDetails(int idStudent)
         {
             StudentDTO studentDTO = studentService.GetStudent(idStudent);
@@ -176,7 +139,7 @@ namespace PL.Controllers
 
                 if (studentService.Get().ToList().Contains(studentService.Get().Where(s => s.Name == studentVM.Name).FirstOrDefault()))
                 {
-                    ViewBag.message = "Студент з таким ім'ям ще існує";
+                    ViewBag.message = "Студент з таким ім'ям вже існує";
                     return View("Report");
                 }
 
@@ -192,6 +155,7 @@ namespace PL.Controllers
             return View();
         }
 
+        // Student/DeleteStudent
         public ActionResult DeleteStudent(int idStudent)
         {
             IEnumerable<EducationDTO> eduList = educationService.GetStudentList(idStudent);
@@ -219,6 +183,7 @@ namespace PL.Controllers
             return View("Report");
         }
 
+        // Student/EditStudent
         public ActionResult EditStudent(int idStudent)
         {
             StudentDTO studentDTO = studentService.GetStudent(idStudent);
@@ -271,6 +236,7 @@ namespace PL.Controllers
             return View("Report");
         }
 
+        // Student/AddSubject
         [HttpGet]
         public ActionResult AddSubject(int idStudent)
         {
@@ -312,6 +278,7 @@ namespace PL.Controllers
             return View();
         }
 
+        // Student/DeleteEducation
         public ActionResult DeleteEducation(int idEducation)
         {
             educationService.DeleteEducation(idEducation);
@@ -320,6 +287,7 @@ namespace PL.Controllers
 
         }
 
+        // Student/EditEducation
         public ActionResult EditEducation(int idEducation)
         {
             EducationDTO educationDTO = educationService.GetEducation(idEducation);
@@ -343,6 +311,7 @@ namespace PL.Controllers
             return View("Report");
         }
 
+        // Student/Report
         public ActionResult Report()
         {
             return View();

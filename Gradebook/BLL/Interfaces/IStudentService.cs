@@ -16,6 +16,11 @@ namespace BLL.Interfaces
         double GetStudentAvg(int id);
         IEnumerable<StudentDTO> GetGroupList(int idGroup);
         void EditStudent(StudentDTO studentDTO);
+        IEnumerable<StudentDTO> SearchByName(IEnumerable<StudentDTO> studentDtos, string searchName);
+        IEnumerable<StudentDTO> SearchByGroup(IEnumerable<StudentDTO> studentDtos, int idGroup);
+        IEnumerable<StudentDTO> SearchByStudentAvg(IEnumerable<StudentDTO> studentDtos, int searchStudentAvg);
+        IEnumerable<StudentDTO> SearchByProgress(IEnumerable<StudentDTO> studentDtos, string searchProgress);
+        IEnumerable<StudentDTO> SearchBySubject(IEnumerable<StudentDTO> studentDtos, IEnumerable<EducationDTO> educationDtos);
         void Dispose();
     }
 }
