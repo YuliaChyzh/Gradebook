@@ -149,7 +149,8 @@ namespace PL.Controllers
                 var groups = mapperGroups.Map<IEnumerable<GroupDTO>, List<GroupViewModel>>(groupDtos);
                 return View("ShowGroups", groups);
             }
-            return View();
+
+            return View(groupVM);
         }
 
         // Group/Report
