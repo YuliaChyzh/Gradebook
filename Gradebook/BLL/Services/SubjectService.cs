@@ -15,10 +15,12 @@ namespace BLL.Services
     public class SubjectService: ISubjectService
     {
         IUnitOfWork Database { get; set; }
+        IEducationService educationService;
 
-        public SubjectService(IUnitOfWork uow)
+        public SubjectService(IUnitOfWork uow, IEducationService educationService)
         {
             Database = uow;
+            this.educationService = educationService;
         }
 
         public IEnumerable<SubjectDTO> Get()
@@ -86,14 +88,37 @@ namespace BLL.Services
 
         public IEnumerable<SubjectDTO> SearchByProgress(IEnumerable<SubjectDTO> subjectDtos, string searchProgress)
         {
+            List<EducationDTO> educations = educationService.Get().Where(s => s.SubjectResult < 60).Distinct().ToList();
+            List<int> idSubjects = new List<int>();
+            foreach (var education in educations)
+            {
+                idSubjects.Add(education.IdSubject);
+            }
+            idSubjects = idSubjects.Distinct().ToList();
+
+            List<SubjectDTO> subjects = new List<SubjectDTO>();
+            foreach (var id in idSubjects)
+            {
+                subjects.Add(GetSubject(id));
+            }
+            IEnumerable<SubjectDTO> subjectNoSuccess = subjectDtos, subjectSuccess = subjectDtos;
+
+            foreach (var subject in subjectDtos)
+            {
+                if (subjects.FirstOrDefault(s => s.Id == subject.Id) == null) subjectNoSuccess = subjectNoSuccess.Where(element => element.Id != subject.Id);
+            }
+            foreach (var subject in subjectDtos)
+            {
+                if (subjectNoSuccess.FirstOrDefault(s => s.Id == subject.Id) != null) subjectSuccess = subjectSuccess.Where(s => s.Id != subject.Id);
+            }
 
             if (searchProgress == "Успішні")
             {
-                subjectDtos = subjectDtos.Where(s => s.SubjectAvg > 60).OrderBy(s => s.Name);
+                return subjectSuccess;
             }
             else if (searchProgress == "Неуспішні")
             {
-                subjectDtos = subjectDtos.Where(s => s.SubjectAvg < 60).OrderBy(s => s.Name);
+                return subjectNoSuccess;
             }
             return subjectDtos;
         }
