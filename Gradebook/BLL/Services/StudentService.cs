@@ -107,6 +107,7 @@ namespace BLL.Services
 
         public IEnumerable<StudentDTO> SearchByProgress(IEnumerable<StudentDTO> studentDtos, string searchProgress)
         {
+            List<EducationDTO> educations1 = educationService.Get().ToList();
             List<EducationDTO> educations = educationService.Get().Where(s => s.SubjectResult < 60).Distinct().ToList();
             List<int> idStudents = new List<int>();
             foreach (var education in educations)
@@ -136,11 +137,11 @@ namespace BLL.Services
 
             if (searchProgress == "Успішні")
             {
-                return studentDtos.Where(s => s.StudentAvg > 60); ;
+                return studentSuccess
             }
             else if (searchProgress == "Неуспішні")
             {
-                return studentDtos.Where(s => s.StudentAvg < 60); ;
+                return studentNoSuccess;
             }
             return studentDtos;
         }
