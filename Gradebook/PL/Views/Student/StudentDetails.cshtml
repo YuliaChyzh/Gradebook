@@ -7,7 +7,7 @@
 
 <h4><b>Ім'я студента: </b>@ViewBag.studentName</h4>
 <h4><b>Група: </b>@ViewBag.studentGroup</h4>
-<h4></b>Середній бал: </b>@ViewBag.studentAvg</h4>
+<h4><b>Середній бал: </b>@ViewBag.studentAvg</h4>
 
 @Html.ActionLink("Додати новий предмет студенту", "AddSubject", "Student", new { idStudent = ViewBag.studentId }, null)
 <table class="table">

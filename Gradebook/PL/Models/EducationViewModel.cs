@@ -15,6 +15,8 @@ namespace PL.Models
 
         [Required(ErrorMessage = "Choose subject")]
         public int IdSubject { get; set; }
+
+        [Required(ErrorMessage = "Оберіть групу")]
         public string SubjectName { get; set; }
 
         [Required(ErrorMessage = "Enter subject result")]

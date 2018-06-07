@@ -53,7 +53,7 @@ namespace DAL.Repositories
         }
         public void Remove(Group item)
         {
-            groupSet.Remove(item);
+            groupSet.Remove(groupSet.Where(s => s.Id == item.Id).FirstOrDefault());
             context.SaveChanges();
         }
     }

@@ -35,9 +35,16 @@ namespace PL.Controllers
         {
             ViewBag.groups = groupService.Get();
             ViewBag.subjects = subjectService.Get();
-            ViewBag.students = studentService.Get().OrderBy(s=>s.StudentAvg);
 
             IEnumerable<StudentDTO> studentDtos = studentService.Get().OrderBy(s => s.Name);
+            List<double> studentAvgs = new List<double>();
+            foreach(var student in studentDtos)
+            {
+                studentAvgs.Add(student.StudentAvg);
+            }
+            studentAvgs = studentAvgs.Distinct().ToList();
+            studentAvgs.Sort();
+            ViewBag.studentAvgs = studentAvgs;
 
             if (!String.IsNullOrEmpty(searchName))
             {
@@ -129,7 +136,7 @@ namespace PL.Controllers
                     return View("Report");
                 }
 
-                if(studentVM.GroupName=="")
+                if(studentVM.GroupName==null)
                 {
                     ViewBag.message = "Введіть групу студента";
                     return View("Report");
@@ -151,7 +158,10 @@ namespace PL.Controllers
                 ViewBag.message = "Студента успішно створено";
                 return View("Report");
             }
-            return View();
+            var groups = groupService.Get();
+            ViewBag.groups = groups;
+
+            return View(studentVM);
         }
 
         // Student/DeleteStudent
@@ -283,7 +293,7 @@ namespace PL.Controllers
                 ViewBag.message = "Предмет додано до даних студента";
                 return View("Report");
             }
-            return View();
+            return View(educationVM);
         }
 
         // Student/DeleteEducation

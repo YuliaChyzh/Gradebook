@@ -92,26 +92,34 @@ namespace PL.Controllers
         [HttpPost]
         public ActionResult EditGroup(EditGroupViewModel editGroupVM)
         {
-            Validate validate = new Validate();
-            if (!(validate.ValidationGroupName(editGroupVM.Name))) return Json(new { Success = false });
-
-            GroupDTO groupDTO = groupService.GetGroup(editGroupVM.Id);
-
-            if (groupService.Get().ToList().Contains(groupService.Get().Where(g => g.Name == editGroupVM.Name).FirstOrDefault()))
+            if (ModelState.IsValid)
             {
-                ViewBag.message = "Група з таким ім'ям вже існує";
-                return View("Report");
+                Validate validate = new Validate();
+                if (!(validate.ValidationGroupName(editGroupVM.Name))) {
+                    ViewBag.message = "Неправильна назва групи";
+                    return View("Report");
+                } 
+
+                GroupDTO groupDTO = groupService.GetGroup(editGroupVM.Id);
+
+                if (groupService.Get().ToList().Contains(groupService.Get().Where(g => g.Name == editGroupVM.Name).FirstOrDefault()))
+                {
+                    ViewBag.message = "Група з таким ім'ям вже існує";
+                    return View("Report");
+                }
+
+                IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<EditGroupViewModel, GroupDTO>()).CreateMapper();
+                groupDTO = mapper.Map<EditGroupViewModel, GroupDTO>(editGroupVM);
+
+                groupService.EditGroup(groupDTO);
+
+                IEnumerable<GroupDTO> groupDtos = groupService.Get();
+                var mapperGroups = new MapperConfiguration(cfg => cfg.CreateMap<GroupDTO, GroupViewModel>()).CreateMapper();
+                var groups = mapperGroups.Map<IEnumerable<GroupDTO>, List<GroupViewModel>>(groupDtos);
+                return View("ShowGroups", groups);
             }
-               
-            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<EditGroupViewModel, GroupDTO>()).CreateMapper();
-            groupDTO = mapper.Map<EditGroupViewModel, GroupDTO>(editGroupVM);
 
-            groupService.EditGroup(groupDTO);
-
-            IEnumerable<GroupDTO> groupDtos = groupService.Get();
-            var mapperGroups = new MapperConfiguration(cfg => cfg.CreateMap<GroupDTO, GroupViewModel>()).CreateMapper();
-            var groups = mapperGroups.Map<IEnumerable<GroupDTO>, List<GroupViewModel>>(groupDtos);
-            return View("ShowGroups", groups);
+            return View(editGroupVM);
         }
 
         // Group/CreateGroup
@@ -128,20 +136,20 @@ namespace PL.Controllers
             {
                 Validate validate = new Validate();
                 if (!(validate.ValidationGroupName(groupVM.Name))) {
-                    ViewBag.message = "Формат назви групи неправильний";
+                    ViewBag.message = "Неправильна назва групи";
                     return View("Report");
                 }
 
-                GroupDTO groupDTO = groupService.GetGroup(groupVM.Id);
+                GroupDTO groupDTO1 = groupService.Get().Where(g => g.Name == groupVM.Name).FirstOrDefault();
 
-                if (groupService.Get().ToList().Contains(groupService.Get().Where(g => g.Name == groupVM.Name).FirstOrDefault()))
+                if (groupDTO1 == null)
                 {
                     ViewBag.message = "Група з таким ім'ям вже існує";
                     return View("Report");
                 }
                    
                 var mapper = new MapperConfiguration(cfg => cfg.CreateMap<GroupViewModel, GroupDTO>()).CreateMapper();
-                groupDTO = mapper.Map<GroupViewModel, GroupDTO>(groupVM);
+                GroupDTO groupDTO = mapper.Map<GroupViewModel, GroupDTO>(groupVM);
                 groupService.AddGroup(groupDTO);
 
                 IEnumerable<GroupDTO> groupDtos = groupService.Get();

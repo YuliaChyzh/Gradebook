@@ -15,10 +15,12 @@ namespace BLL.Services
     public class StudentService: IStudentService
     {
         IUnitOfWork Database { get; set; }
+        IEducationService educationService;
 
-        public StudentService(IUnitOfWork uow)
+        public StudentService(IUnitOfWork uow, IEducationService educationService)
         {
             Database = uow;
+            this.educationService = educationService;
         }
 
         public IEnumerable<StudentDTO> Get()
@@ -105,14 +107,36 @@ namespace BLL.Services
 
         public IEnumerable<StudentDTO> SearchByProgress(IEnumerable<StudentDTO> studentDtos, string searchProgress)
         {
+            List<EducationDTO> educations = educationService.Get().Where(s => s.SubjectResult < 60).Distinct().ToList();
+            List<int> idStudents = new List<int>();
+            foreach (var education in educations)
+            {
+                idStudents.Add(education.IdStudent);
+            }
+            idStudents = idStudents.Distinct().ToList();
+            List<StudentDTO> students = new List<StudentDTO>();
+            foreach (var id in idStudents)
+            {
+                students.Add(GetStudent(id));
+            }
+            IEnumerable<StudentDTO> studentNoSuccess = studentDtos, studentSuccess = studentDtos;
+            foreach (var student in studentDtos)
+            {
+                if (!students.Contains(student)) studentNoSuccess=studentNoSuccess.Where(element => element != student);
+            }
+            foreach (var student in studentDtos)
+            {
+                if (studentNoSuccess.Contains(student)) studentSuccess.ToList().Remove(student);
+            }
+
 
             if (searchProgress == "Успішні")
             {
-                studentDtos = studentDtos.Where(s => s.StudentAvg > 60).OrderBy(s => s.Name);
+                return studentSuccess;
             }
             else if (searchProgress == "Неуспішні")
             {
-                studentDtos = studentDtos.Where(s => s.StudentAvg < 60).OrderBy(s => s.Name);
+                return studentNoSuccess;
             }
             return studentDtos;
         }

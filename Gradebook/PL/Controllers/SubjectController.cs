@@ -30,8 +30,16 @@ namespace PL.Controllers
         public ActionResult ShowSubject(string searchName, string searchSubjectAvg, string searchProgress)
         {
             ViewBag.subjects = subjectService.Get().OrderBy(s => s.SubjectAvg);
-
+            
             IEnumerable<SubjectDTO> subjectDtos = subjectService.Get().OrderBy(s=>s.Name);
+            List<double> subjectAvgs = new List<double>();
+            foreach (var subject in subjectDtos)
+            {
+                subjectAvgs.Add(subject.SubjectAvg);
+            }
+            subjectAvgs = subjectAvgs.Distinct().ToList();
+            subjectAvgs.Sort();
+            ViewBag.subjectAvgs = subjectAvgs;
 
             if (!String.IsNullOrEmpty(searchName))
             {
@@ -167,7 +175,7 @@ namespace PL.Controllers
                 ViewBag.message = "Предмет додано";
                 return View("Report");
             }
-            return View();
+            return View(subjectVM);
         }
 
         // Subject/Report

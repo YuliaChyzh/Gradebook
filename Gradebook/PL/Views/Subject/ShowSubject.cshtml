@@ -11,11 +11,11 @@
     <p>
         Назва: <input type="text" name="searchName">
 
-        Середній бал: <select id="subjectsAvg" name="searchSubjectAvg" asp-for="searchSubjectAvg" asp-items="@ViewBag.students">
+        Середній бал: <select id="subjectsAvg" name="searchSubjectAvg" asp-for="searchSubjectAvg" asp-items="@ViewBag.subjectAvgs">
             <option>Всі</option>
-            @foreach (var item in ViewBag.subjects)
+            @foreach (var item in ViewBag.subjectAvgs)
             {
-                <option>@item.SubjectAvg.ToString("0.00")</option>
+                <option>@item.ToString("0.00")</option>
             }
         </select>
 

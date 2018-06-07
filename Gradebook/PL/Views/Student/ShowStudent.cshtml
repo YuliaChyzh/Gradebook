@@ -24,9 +24,9 @@
 
         Середній бал: <select id="studentsAvg" name="searchStudentAvg" asp-for="searchStudentAvg" asp-items="@ViewBag.students">
                         <option>Всі</option>
-                        @foreach (var item in ViewBag.students)
+                        @foreach (var item in ViewBag.studentAvgs)
                         {
-                            <option>@item.StudentAvg.ToString("0.00")</option>
+                            <option>@item.ToString("0.00")</option>
                         }
                       </select> 
         

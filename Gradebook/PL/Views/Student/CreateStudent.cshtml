@@ -10,7 +10,8 @@
         <form class="p-a-1" action="/Student/CreateStudent" method="post">
             <div class="form-group">
                 <label for="Name"> Ім'я: </label>
-                <input class="form-control" name="Name" value="@Model.Name" />
+                <input class="form-control" name="Name" />
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 <label for="GroupName"> Група: </label>
@@ -21,6 +22,7 @@
                         <option>@item.Name</option>
                     }
                 </select>
+                @Html.ValidationMessageFor(model => model.GroupName, "", new { @class = "text-danger" })
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Підтвердити</button>
