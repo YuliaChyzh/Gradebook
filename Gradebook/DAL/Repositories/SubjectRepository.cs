@@ -19,6 +19,14 @@ namespace DAL.Repositories
             subjectSet = context.Set<Subject>();
         }
 
+        public EducationContext EducationContext
+        {
+            get => default(EducationContext);
+            set
+            {
+            }
+        }
+
         public IEnumerable<Subject> Get()
         {
             return subjectSet

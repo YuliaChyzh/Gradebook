@@ -8,9 +8,11 @@
     <h3 class="card-header text-center">Додати нову групу</h3>
     <div class="card-body">
         <form class="p-a-1" action="/Group/CreateGroup" method="post">
+            <div class="validation" asp-validation-summary="ModelOnly"></div>
             <div class="form-group">
                 <label for="Name"> Назва: </label>
                 <input class="form-control" name="Name" value="@Model.Name" />
+                <span asp-validation-for="Name"></span>
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Підтвердити</button>
@@ -21,5 +23,6 @@
 
 <p>@Html.ActionLink("До списку груп", "ShowGroups", "Group")</p>
 <p>@Html.ActionLink("На головну", "Index", "Home")</p>
+
 
 

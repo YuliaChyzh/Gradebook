@@ -127,7 +127,10 @@ namespace PL.Controllers
             if (ModelState.IsValid)
             {
                 Validate validate = new Validate();
-                if (!(validate.ValidationGroupName(groupVM.Name))) return Json(new { Success = false });
+                if (!(validate.ValidationGroupName(groupVM.Name))) {
+                    ViewBag.message = "Формат назви групи неправильний";
+                    return View("Report");
+                }
 
                 GroupDTO groupDTO = groupService.GetGroup(groupVM.Id);
 
