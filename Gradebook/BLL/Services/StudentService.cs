@@ -114,6 +114,9 @@ namespace BLL.Services
                 idStudents.Add(education.IdStudent);
             }
             idStudents = idStudents.Distinct().ToList();
+
+            //studentDtos.Where(s => s.StudentAvg > 60);
+
             List<StudentDTO> students = new List<StudentDTO>();
             foreach (var id in idStudents)
             {
@@ -122,21 +125,22 @@ namespace BLL.Services
             IEnumerable<StudentDTO> studentNoSuccess = studentDtos, studentSuccess = studentDtos;
             foreach (var student in studentDtos)
             {
-                if (!students.Contains(student)) studentNoSuccess=studentNoSuccess.Where(element => element != student);
+                if (students.FirstOrDefault(s => s.Id == student.Id) == null) studentNoSuccess = studentNoSuccess.Where(element => element.Id != student.Id);
             }
             foreach (var student in studentDtos)
             {
-                if (studentNoSuccess.Contains(student)) studentSuccess.ToList().Remove(student);
+                if (studentNoSuccess.FirstOrDefault(s => s.Id == student.Id) != null) studentSuccess = studentSuccess.Where(s => s.Id != student.Id);
             }
+
 
 
             if (searchProgress == "Успішні")
             {
-                return studentSuccess;
+                return studentDtos.Where(s => s.StudentAvg > 60); ;
             }
             else if (searchProgress == "Неуспішні")
             {
-                return studentNoSuccess;
+                return studentDtos.Where(s => s.StudentAvg < 60); ;
             }
             return studentDtos;
         }
