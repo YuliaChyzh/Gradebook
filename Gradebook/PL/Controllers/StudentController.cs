@@ -132,7 +132,7 @@ namespace PL.Controllers
                 Validate validate = new Validate();
                 if (!(validate.ValidationStudentName(studentVM.Name)))
                 {
-                    ViewBag.message = "Введіть ім'я студента ще раз";
+                    ViewBag.message = "Неправильне ім'я студента";
                     return View("Report");
                 }
 
@@ -228,7 +228,7 @@ namespace PL.Controllers
             Validate validate = new Validate();
             if (!(validate.ValidationStudentName(editStudentVM.Name)))
             {
-                ViewBag.message = "Введіть ім'я студента ще раз";
+                ViewBag.message = "Неправильне ім'я студента";
                 return View("Report");
             }
 

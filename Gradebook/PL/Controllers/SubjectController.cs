@@ -123,7 +123,7 @@ namespace PL.Controllers
             Validate validate = new Validate();
             if (!(validate.ValidationSubjectName(editSubjectVM.Name)))
             {
-                ViewBag.message = "Введіть назву предмета ще раз";
+                ViewBag.message = "Неправильна назва предмету";
                 return View("Report");
             }
 
@@ -156,7 +156,7 @@ namespace PL.Controllers
             {
                 Validate validate = new Validate();
                 if (!(validate.ValidationSubjectName(subjectVM.Name))) {
-                    ViewBag.message = "Введіть назву предмета ще раз";
+                    ViewBag.message = "Неправильна назва предмету";
                     return View("Report");
                 }
 
